@@ -5,16 +5,16 @@ package states
 	public class InitState implements IAgentState
 	{
 		
-		public function update(a:Skeleton):void
+		public function update(s:Skeleton):void
 		{
-			a.setState(Skeleton.WANDER);
+			s.setState(Skeleton.WANDER);
 		}
 		
-		public function enter(a:Skeleton):void
+		public function enter(s:Skeleton):void
 		{
 			
 		}
-		public function exit(a:Skeleton):void
+		public function exit(s:Skeleton):void
 		{
 			
 		}

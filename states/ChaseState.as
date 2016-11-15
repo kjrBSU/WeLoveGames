@@ -6,36 +6,23 @@ package states
 		
 		/* INTERFACE agent.states.IAgentState */
 		
-		public function update(a:Skeleton):void
+		public function update(s:Skeleton):void
 		{
-			var dx:Number = a.stage.mouseX - a.x;
-			var dy:Number = a.stage.mouseY - a.y;
-			var rad:Number = Math.atan2(dy, dx);
-			a.velocity.x = Math.cos(rad);
-			a.velocity.y = Math.sin(rad);
-			if (a.numCycles < 40) return;
-			a.say("Chasing!");
-			a.speed = 2;
-			if (a.distanceToMouse > a.chaseRadius) {
-				a.setState(Skeleton.CONFUSED);
+		
+			if (s.distanceToObject() > s.chaseRadius) {
+				s.setState(Skeleton.CONFUSED);
 			}
-			if (a.distanceToMouse < a.fleeRadius) {
-				a.setState(Skeleton.FLEE);
+			if (s.distanceToObject() < s.fleeRadius) {
+				s.setState(Skeleton.FLEE);
 			}
 		}
 		
-		public function enter(a:Skeleton):void
+		public function enter(s:Skeleton):void
 		{
-			var dx:Number = a.stage.mouseX - a.x;
-			var dy:Number = a.stage.mouseY - a.y;
-			var rad:Number = Math.atan2(dy, dx);
-			a.velocity.x = Math.cos(rad);
-			a.velocity.y = Math.sin(rad);
-			a.say("Oh wow! Something to chase!");
-			a.speed = 0;
+			
 		}
 		
-		public function exit(a:Skeleton):void
+		public function exit(s:Skeleton):void
 		{
 			
 		}

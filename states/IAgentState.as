@@ -4,9 +4,9 @@ package states // pointing itself is stored
 	
 	public interface IAgentState 
 	{
-		function update(a:Skeleton):void;
-		function enter(a:Skeleton):void;
-		function exit(a:Skeleton):void; // basic function of agent behaviors 
+		function update(s:Skeleton):void;
+		function enter(s:Skeleton):void;
+		function exit(s:Skeleton):void; // basic function of agent behaviors 
 	}
 	
 }

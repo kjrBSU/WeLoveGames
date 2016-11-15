@@ -1,23 +1,35 @@
-package states 
+﻿package states 
 {
 	import Skeleton;
 	
 	public class WanderState implements IAgentState
 	{
-		
-		public function update(a:Skeleton):void
+		private var frames:Number = 0;
+		private var startFrames: Number = 30;
+		public function update(s:Skeleton):void
 		{
-			a.move();
+			if (frames >= startFrames) 
+			{
+				 if (s.isBump == true )
+				 {
+					s.setState(Skeleton.BUMP) 
+				 }
+			}
+			frames++;
+			s.move();
 		}
 		
-		public function enter(a:Skeleton):void
+		public function enter(s:Skeleton):void
 		{
-			a.vx = Math.random() - Math.random();
-			a.vy = Math.random() - Math.random();
+			if (frames < startFrames) 
+			{
+				s.move();
+			}
+			frames++
 		}
-		public function exit(a:Skeleton):void
+		public function exit(s:Skeleton):void
 		{
-			
+		
 		}
 	}
 }
