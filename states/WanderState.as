@@ -14,6 +14,11 @@
 				 {
 					s.setState(Skeleton.BUMP) 
 				 }
+				 if (s.isPlayerNear == true)
+				 {
+					s.setState(Skeleton.CHASE);
+					trace("Enter Chase");
+				 }
 			}
 			frames++;
 			s.move();

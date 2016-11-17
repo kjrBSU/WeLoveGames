@@ -3,6 +3,7 @@ package
 	import Skeleton;
 	import Collision;
 	import Map;
+	import Player;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
@@ -16,6 +17,7 @@ package
 	public class  ProtectDaBooty extends Sprite
 	{
 		public var skeleton:Skeleton = new Skeleton()
+		public var player:Player = new Player();
 		public var map:Map = new Map();
 		//public var mapCollide:Collision = new Collision(map);
  		
@@ -36,6 +38,11 @@ package
 			map.addChild(skeleton);
 			skeleton.x = map.width / 2;
 			skeleton.y = map.height / 2;
+			skeleton.player = player;
+			
+			map.addChild(player);
+			player.x = map.width / 2;
+			player.y = map.height / 2 - 100;
 			
 			
 			addEventListener(Event.ENTER_FRAME, gameLoop);
@@ -46,6 +53,7 @@ package
 			skeleBump();
 			skeleton.update();
 			camera(skeleton);
+			skeleton.playerNear();
 		}
 		
 		public function camera(char:Sprite):void 
@@ -53,7 +61,7 @@ package
 			root.scrollRect = new Rectangle(char.x - stage.stageWidth / 2, char.y - stage.stageHeight / 2, 
 											stage.stageWidth, stage.stageHeight);
 		}
-		
+			
 		public function skeleBump():void
 		{
 			for (var i:int = 0; i < map.numChildren; i++)

@@ -9,12 +9,14 @@
 	import states.WanderState;
 	
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	
 	public class Skeleton extends MovieClip 
 	{
 		public static const WANDER:IAgentState = new WanderState();
 		public static const BUMP:IAgentState = new BumpState();
 		public static const INIT:IAgentState = new InitState();
+		public static const CHASE:IAgentState = new ChaseState();
 		
 		private var _previousState:IAgentState;
 		private var _currentState:IAgentState;
@@ -24,13 +26,19 @@
 		
 		public var speed:Number;
 		
-		public var _isBump:Boolean;
+		public var isSkeleBump:Boolean;
+		public var isPlayerNear:Boolean = false;
+		
+		public var chaseRadius:Number = 200;
+		
+		public var player:MovieClip;
+		
 		
 		public function Skeleton() 
 		{
 			vx = Math.random() - Math.random();
 			vy = Math.random() - Math.random();
-			_isBump = false;
+			isSkeleBump = false;
 			speed = 5;
 			_currentState = WANDER;
 		}
@@ -57,7 +65,7 @@
 		
 		public function get currentState():IAgentState { return _currentState; }
 		
-		public function get isBump():Boolean { return _isBump; }
+		public function get isBump():Boolean { return isSkeleBump; }
 		
 		public function move():void {
 			var angle = Math.atan2(this.vy * Math.PI, this.vx * Math.PI); 
@@ -65,14 +73,37 @@
 			this.y += Math.sin(angle) * speed;
 		}
 		
-		public function isHit(dspOb:DisplayObject):void {
+		public function isHit(dspOb:DisplayObject):void 
+		{
 				if (this.hitTestObject(dspOb) == true)
 				{
-					_isBump = true
+					isSkeleBump = true
 				}
 		}
+		
+		public function playerNear():void
+		{
+			var dx:Number = player.x - this.x;
+			var dy:Number = player.y - this.y;
+			var distanceToPlayer = Math.sqrt(dx * dx + dy * dy);
+			
+			if (distanceToPlayer < chaseRadius)
+			{
+				isPlayerNear = true;
+			}
+			else 
+			{
+				isPlayerNear = false;
+			}
+		}
+		
+		public function moveTowardPlayer()
+		{
+			var dx:Number = player.x - this.x;
+			var dy:Number = player.y - this.y;
+			var angle = Math.atan2(dy, dx);
+			this.vx = Math.cos(angle);
+			this.vy = Math.sin(angle);
+		}
 	}
-	
-
-	
 }
