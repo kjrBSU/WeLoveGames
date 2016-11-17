@@ -8,8 +8,8 @@ package states
 		
 		public function update(s:Skeleton):void
 		{
-			var dx = s.player.x - s.x;
-			var dy = s.player.y - s.y;
+			var dx = s._target.x - s.x;
+			var dy = s._target.y - s.y;
 			var angle = Math.atan2(dy, dx);
 			s.vx = Math.cos(angle);
 			s.vy = Math.sin(angle);
