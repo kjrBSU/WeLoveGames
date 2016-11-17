@@ -26,28 +26,34 @@
 		
 		public var speed:Number;
 		
-		public var isSkeleBump:Boolean;
-		public var isPlayerNear:Boolean = false;
+		private var _isSkeleBump:Boolean;
+		private var _isPlayerNear:Boolean = false;
 		
 		public var chaseRadius:Number = 200;
+		private var _hitRadius:Number = 1;
 		
-		public var player:MovieClip;
+		public var _target:MovieClip;
 		
 		
 		public function Skeleton() 
 		{
 			vx = Math.random() - Math.random();
 			vy = Math.random() - Math.random();
-			isSkeleBump = false;
+			_isSkeleBump = false;
 			speed = 5;
 			_currentState = WANDER;
 		}
 		
 		public function update():void 
 		{
+			
 			if (!_currentState) return;
 			_currentState.update(this);
 			//trace ("Spoopy Skeleton Update!");
+			if (this._target != null) 
+			{
+				this.playerNear();
+			}
 		}
 		
 		public function setState(newState:IAgentState):void
@@ -61,49 +67,81 @@
 			_currentState.enter(this);
 		}
 		
-		public function get previousState():IAgentState { return _previousState; }
+		public function set target(target:MovieClip):void 
+		{
+			_target = target;
+		}
 		
-		public function get currentState():IAgentState { return _currentState; }
+		public function set isSkeleBump(i:Boolean):void
+		{
+			_isSkeleBump = i;
+		}
 		
-		public function get isBump():Boolean { return isSkeleBump; }
+		public function get previousState():IAgentState 
+		{ 
+			return _previousState;
+		}
 		
-		public function move():void {
+		public function get currentState():IAgentState 
+		{ 
+			return _currentState; 	
+		}
+		
+		public function get isBump():Boolean 
+		{
+			return _isSkeleBump;
+		}
+		
+		public function get isPlayerNear():Boolean
+		{
+			return _isPlayerNear;
+		}
+		
+		public function move():void 
+		{
 			var angle = Math.atan2(this.vy * Math.PI, this.vx * Math.PI); 
 			this.x += Math.cos(angle) * speed;
 			this.y += Math.sin(angle) * speed;
 		}
 		
-		public function isHit(dspOb:DisplayObject):void 
-		{
+		public function didHitObject(dspOb:DisplayObject):void 
+		{	
 				if (this.hitTestObject(dspOb) == true)
 				{
-					isSkeleBump = true
+					_isSkeleBump = true
 				}
+				
+				/*else if (this.hitTestObject(dspOb) != true )
+				{
+					_isSkeleBump = false;
+				}*/
 		}
 		
 		public function playerNear():void
 		{
-			var dx:Number = player.x - this.x;
-			var dy:Number = player.y - this.y;
+			var dx:Number = _target.x - this.x;
+			var dy:Number = _target.y - this.y;
 			var distanceToPlayer = Math.sqrt(dx * dx + dy * dy);
 			
 			if (distanceToPlayer < chaseRadius)
 			{
-				isPlayerNear = true;
+				_isPlayerNear = true;
+				trace("hit!");
 			}
 			else 
 			{
-				isPlayerNear = false;
+				_isPlayerNear = false;
 			}
 		}
 		
 		public function moveTowardPlayer()
 		{
-			var dx:Number = player.x - this.x;
-			var dy:Number = player.y - this.y;
+			var dx:Number = _target.x - this.x;
+			var dy:Number = _target.y - this.y;
 			var angle = Math.atan2(dy, dx);
 			this.vx = Math.cos(angle);
 			this.vy = Math.sin(angle);
 		}
+		
 	}
 }

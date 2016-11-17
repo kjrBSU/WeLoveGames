@@ -38,11 +38,11 @@ package
 			map.addChild(skeleton);
 			skeleton.x = map.width / 2;
 			skeleton.y = map.height / 2;
-			skeleton.player = player;
+			skeleton.target = player;
 			
 			map.addChild(player);
 			player.x = map.width / 2;
-			player.y = map.height / 2 - 100;
+			player.y = map.height / 2 - 500;
 			
 			
 			addEventListener(Event.ENTER_FRAME, gameLoop);
@@ -50,10 +50,10 @@ package
 		
 		private function gameLoop(e:Event):void 
 		{
+			trace(skeleton.isBump);
 			skeleBump();
 			skeleton.update();
 			camera(skeleton);
-			skeleton.playerNear();
 		}
 		
 		public function camera(char:Sprite):void 
@@ -68,7 +68,7 @@ package
 			{
 			if (String(map.getChildAt(i)) == "[object MapBound]")
 				//{
-					skeleton.isHit(map.getChildAt(i));
+					skeleton.didHitObject(map.getChildAt(i));
 				//}
 			}
 		}
