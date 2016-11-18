@@ -1,11 +1,13 @@
 ﻿package  {
 	
+	import adobe.utils.CustomActions;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import states.BumpState;
 	import states.ChaseState;
 	import states.IAgentState;
 	import states.InitState;
+	import states.ThrowState;
 	import states.WanderState;
 	
 	import flash.display.MovieClip;
@@ -17,12 +19,13 @@
 		public static const BUMP:IAgentState = new BumpState();
 		public static const INIT:IAgentState = new InitState();
 		public static const CHASE:IAgentState = new ChaseState();
+		public static const THROW:IAgentState = new ThrowState();
 		
 		private var _previousState:IAgentState;
 		private var _currentState:IAgentState;
 		
-		public var vx:Number;
-		public var vy:Number;
+		private var _vx:Number;
+		private var _vy:Number;
 		
 		public var speed:Number;
 		
@@ -30,6 +33,7 @@
 		private var _isPlayerNear:Boolean = false;
 		
 		public var chaseRadius:Number = 200;
+		public var throwRadius:Number = 150;
 		private var _hitRadius:Number = 1;
 		
 		public var _target:MovieClip;
@@ -50,10 +54,6 @@
 			if (!_currentState) return;
 			_currentState.update(this);
 			//trace ("Spoopy Skeleton Update!");
-			if (this._target != null) 
-			{
-				this.playerNear();
-			}
 		}
 		
 		public function setState(newState:IAgentState):void
@@ -75,6 +75,25 @@
 		public function set isSkeleBump(i:Boolean):void
 		{
 			_isSkeleBump = i;
+		}
+		
+		public function set vx(vx:Number):void 
+		{
+			_vx = vx;
+		}
+		
+		public function set vy(vy:Number):void
+		{
+			_vy = vy;
+		}
+		public function get vx(): Number  
+		{
+			return _vx;
+		}
+		
+		public function get vy(): Number
+		{
+			return _vy;
 		}
 		
 		public function get previousState():IAgentState 
@@ -117,21 +136,13 @@
 				}*/
 		}
 		
-		public function playerNear():void
+		public function distanceToPlayer(): Number
 		{
 			var dx:Number = _target.x - this.x;
 			var dy:Number = _target.y - this.y;
-			var distanceToPlayer = Math.sqrt(dx * dx + dy * dy);
+			var distance = Math.sqrt(dx * dx + dy * dy);
 			
-			if (distanceToPlayer < chaseRadius)
-			{
-				_isPlayerNear = true;
-				trace("hit!");
-			}
-			else 
-			{
-				_isPlayerNear = false;
-			}
+			return distance;
 		}
 		
 		public function moveTowardPlayer()
@@ -139,8 +150,8 @@
 			var dx:Number = _target.x - this.x;
 			var dy:Number = _target.y - this.y;
 			var angle = Math.atan2(dy, dx);
-			this.vx = Math.cos(angle);
-			this.vy = Math.sin(angle);
+			this.x += Math.cos(angle) * speed;
+			this.y += Math.sin(angle) * speed; 
 		}
 		
 	}
