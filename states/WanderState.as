@@ -14,7 +14,7 @@
 				 {
 					s.setState(Skeleton.BUMP) 
 				 }
-				 if (s.isPlayerNear == true)
+				 if (s.distanceToPlayer() < s.chaseRadius)
 				 {
 					s.setState(Skeleton.CHASE);
 					trace("Enter Chase");

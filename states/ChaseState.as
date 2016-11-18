@@ -8,12 +8,17 @@ package states
 		
 		public function update(s:Skeleton):void
 		{
-			var dx = s._target.x - s.x;
+			/*var dx = s._target.x - s.x;
 			var dy = s._target.y - s.y;
 			var angle = Math.atan2(dy, dx);
 			s.vx = Math.cos(angle);
 			s.vy = Math.sin(angle);
-			s.move();
+			*/
+			s.moveTowardPlayer();
+			if (s.distanceToPlayer() < s.throwRadius)
+					{
+						s.setState(Skeleton.THROW);
+					}
 		}
 		
 		public function enter(s:Skeleton):void
