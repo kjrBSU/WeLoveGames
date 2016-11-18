@@ -41,7 +41,7 @@ package
 			skeleton.target = player;
 			
 			map.addChild(player);
-			player.x = map.width / 2;
+			player.x = map.width / 2 + 100;
 			player.y = map.height / 2 - 500;
 			
 			
