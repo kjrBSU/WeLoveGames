@@ -20,9 +20,11 @@ package states
 			}
 			for each (var b:MovieClip in s.bulletsAdded)
 			{
-				
-				b.x += 0
-				b.y += -10;
+				var dx:Number = s.target.x - s.x;
+				var dy:Number = s.target.y - s.y;
+				var angle = Math.atan2(dy, dx);
+				b.x += Math.cos(angle) * 10;
+				b.y += Math.sin(angle) * 10; 
 				s.drawBullets();
 			}
 			frame++;

@@ -34,8 +34,8 @@
 		private var _isSkeleBump:Boolean;
 		private var _isPlayerNear:Boolean = false;
 		
-		public var chaseRadius:Number = 200;
-		public var throwRadius:Number = 150;
+		public var chaseRadius:Number = 500;
+		public var throwRadius:Number = 450;
 		private var _hitRadius:Number = 1;
 		
 		public var _target:MovieClip;
@@ -98,6 +98,11 @@
 		public function get vy(): Number
 		{
 			return _vy;
+		}
+		
+		public function get target(): MovieClip 
+		{
+			return _target;
 		}
 		
 		public function get previousState():IAgentState 
