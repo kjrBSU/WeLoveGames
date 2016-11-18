@@ -50,7 +50,6 @@ package
 		
 		private function gameLoop(e:Event):void 
 		{
-			trace(skeleton.isBump);
 			skeleBump();
 			skeleton.update();
 			camera(skeleton);
