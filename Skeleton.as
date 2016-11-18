@@ -1,5 +1,7 @@
 ﻿package  {
 	
+	import SkeleBullet;
+	
 	import adobe.utils.CustomActions;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -38,11 +40,13 @@
 		
 		public var _target:MovieClip;
 		
+		public var bulletsAdded:Array = new Array()
+		
 		
 		public function Skeleton() 
 		{
-			vx = Math.random() - Math.random();
-			vy = Math.random() - Math.random();
+			vx =  0//Math.random() - Math.random();
+			vy = - 1//Math.random() - Math.random();
 			_isSkeleBump = false;
 			speed = 5;
 			_currentState = WANDER;
@@ -154,5 +158,22 @@
 			this.y += Math.sin(angle) * speed; 
 		}
 		
+		public function createBullet(): MovieClip
+		{
+			var bullet:SkeleBullet = new SkeleBullet();
+			
+			bullet.x = this.x;
+			bullet.y = this.y;
+			
+			return bullet;
+		}
+		
+		public function drawBullets():void
+		{
+			for each(var b:MovieClip in bulletsAdded)
+			{
+				parent.addChild(b);
+			}
+		}
 	}
 }
