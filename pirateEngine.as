@@ -19,41 +19,47 @@
 		public function pirateEngine() {
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			pirateArray.push(pirate1, pirate2, pirate3, pirate4);
-			pirateTimer.addEventListener(TimerEvent.TIMER, addAPirate);
+			addAPirate();
 			pirateTimer.start();
 		}
 		
-		private function addAPirate(timer:TimerEvent):void {
+		private function addAPirate():void {
 			var mName:pirateClass = new pirateClass();
-			var xLocation:Number;
-			var yLocation:Number;
+			var pirateX:Number;
+			var pirateY:Number;
 			
-			var myNum:Number = Math.random()*10;
 			pirateTimer.reset();
 			trace("timer done");
 			var i:Number;
 			
 			for (var j:int = 0; j < 1; j++) {
-			for (var element:String in pirateArray[i = int(Math.random()*pirateArray.length)]) {
-					if(element == "mName") {
+			for (var element:String in pirateArray[i = Math.floor(Math.random()*pirateArray.length)]) {
+				
+					if(element == "mName" && element != "xLocation" && element != "yLocation") {
 						mName = pirateArray[i][element];
 						trace (mName);
 					}
-					else if (element == "xLocation") {
+					else if (element == "xLocation" && element != "mName" && element != "yLocation") {
 						trace (pirateArray [i][element]);
-						xLocation = pirateArray[i][element];
-						mName.x = xLocation;
+						pirateX = pirateArray[i][element];
+						
 					}
-					else if (element == "yLocation") {
+					else if (element == "yLocation" && element != "mName" && element != "xLocation") {
 						trace (pirateArray[i][element]);
-						yLocation = pirateArray[i][element];
-						mName.y = yLocation;
+						pirateY = pirateArray[i][element];
+						
 
 					}
+					
 				}
-			}
-				pirateMan = mName;
+				trace(i);
+				mName.x = pirateX;
+				mName.y = pirateY;
 				addChild(mName);
+				
+			}
+				
+				
 			
 				//var functionMoveThePirate:Function = moveThePirate(mName);
 				//addEventListener(Event.ENTER_FRAME, functionMoveThePirate);
