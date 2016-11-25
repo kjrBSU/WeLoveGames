@@ -9,7 +9,7 @@
 		private var pirateMan:pirateClass = new pirateClass();
 		private var treasure:Treasure = new Treasure();
 		private var pirateArray:Array = new Array();
-		private var pirateTimer:Timer = new Timer (1000, 1);
+		private var pirateTimer:Timer = new Timer (5000);
 		
 		public var pirate1:Object = { mName: pirateMan, xLocation: 300, yLocation: 0};
 		public var pirate2:Object = { mName: pirateMan, xLocation: 600, yLocation: 200};
@@ -19,11 +19,15 @@
 		public function pirateEngine() {
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			pirateArray.push(pirate1, pirate2, pirate3, pirate4);
-			addAPirate();
+			pirateTimer.addEventListener(TimerEvent.TIMER, addAPirate);
+			treasure.x = stage.stageWidth/2;
+			treasure.y = stage.stageHeight/2;
+			addChild(treasure);
 			pirateTimer.start();
+			trace("started");
 		}
 		
-		private function addAPirate():void {
+		private function addAPirate(timer:TimerEvent):void {
 			var mName:pirateClass = new pirateClass();
 			var pirateX:Number;
 			var pirateY:Number;
@@ -57,14 +61,40 @@
 				mName.y = pirateY;
 				addChild(mName);
 				
+				pirateTimer.start();
+				
 			}
 				
 				
 			
-				//var functionMoveThePirate:Function = moveThePirate(mName);
-				//addEventListener(Event.ENTER_FRAME, functionMoveThePirate);
+				mName.addEventListener(Event.ENTER_FRAME, moveThePirate);
 				
 			}
+			
+			
+			private function moveThePirate(e:Event):void
+				{
+					var speed = 5;
+					if(e.currentTarget.x > treasure.x)
+					{
+						e.currentTarget.x -= speed;
+						
+					}
+					else if(e.currentTarget.x < treasure.x)
+					   {
+						   e.currentTarget.x += speed;
+					   }
+					 else if (e.currentTarget.y > treasure.y)
+					 {
+						 e.currentTarget.y -= speed;
+					 }
+					 else if (e.currentTarget.y < treasure.y)
+					 {
+						 e.currentTarget.y += speed;
+					 }
+					 
+					  
+					}
 			/*
 			private function moveThePirate(pirate:pirateClass):Function {
 				  return function(e:Event):void {
@@ -81,6 +111,7 @@
 				return (destination-startPosition)/coeff;
 			}
 			*/
+			
 			
 		/*	if(myNum <= 5){
 				addPirate_Left_Right(pirateMan);
