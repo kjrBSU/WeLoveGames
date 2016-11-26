@@ -4,9 +4,13 @@
 	import flash.events.TimerEvent
 	import flash.utils.Timer;
 	import flash.display.StageScaleMode;
+	import flash.display.Sprite;
 	
 	public class pirateEngine extends MovieClip{
+		private var pirateLayer:Sprite = new Sprite();
+		
 		private var pirateMan:pirateClass = new pirateClass();
+		private var pirateWithTreasure:treasurePirate = new treasurePirate();
 		private var treasure:Treasure = new Treasure();
 		private var pirateArray:Array = new Array();
 		private var pirateTimer:Timer = new Timer (5000);
@@ -17,14 +21,30 @@
 		public var pirate4:Object = { mName: pirateMan, xLocation: 0, yLocation: 200};
 		
 		public function pirateEngine() {
+			addChild(pirateLayer);
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			pirateArray.push(pirate1, pirate2, pirate3, pirate4);
 			pirateTimer.addEventListener(TimerEvent.TIMER, addAPirate);
+			addEventListener(Event.ENTER_FRAME, didPirateHitTreasure);
 			treasure.x = stage.stageWidth/2;
 			treasure.y = stage.stageHeight/2;
-			addChild(treasure);
+			pirateLayer.addChild(treasure);
 			pirateTimer.start();
-			trace("started");
+		}
+		
+		private function didPirateHitTreasure(e:Event):void 
+		{
+				
+					if(pirateMan.hitTestPoint(treasure.x, treasure.y)) {
+						pirateWithTreasure.x = pirateMan.x;
+						pirateWithTreasure.y = pirateMan.y;
+						pirateLayer.removeChild(treasure);
+						pirateLayer.removeChild(pirateMan);
+						addChild(pirateWithTreasure);
+						removeEventListener(Event.ENTER_FRAME, didPirateHitTreasure);
+						removeEventListener(Event.ENTER_FRAME, movePirateToTreasure);
+						pirateTimer.removeEventListener(TimerEvent.TIMER, addAPirate);
+					}
 		}
 		
 		private function addAPirate(timer:TimerEvent):void {
@@ -59,7 +79,7 @@
 				trace(i);
 				mName.x = pirateX;
 				mName.y = pirateY;
-				addChild(mName);
+				pirateLayer.addChild(mName);
 				
 				pirateTimer.start();
 				
@@ -67,12 +87,12 @@
 				
 				
 			
-				mName.addEventListener(Event.ENTER_FRAME, moveThePirate);
+				mName.addEventListener(Event.ENTER_FRAME, movePirateToTreasure);
 				
 			}
 			
 			
-			private function moveThePirate(e:Event):void
+			private function movePirateToTreasure(e:Event):void
 				{
 					var speed = 5;
 					if(e.currentTarget.x > treasure.x)
