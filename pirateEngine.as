@@ -1,4 +1,5 @@
-﻿package  {
+﻿
+package  {
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.TimerEvent
@@ -10,6 +11,7 @@
 		private var pirateLayer:Sprite = new Sprite();
 		
 		private var pirateMan:pirateClass = new pirateClass();
+		private var pirateGoal:piratePad = new piratePad();
 		private var pirateWithTreasure:treasurePirate = new treasurePirate();
 		private var treasure:Treasure = new Treasure();
 		private var pirateArray:Array = new Array();
@@ -23,19 +25,35 @@
 		public function pirateEngine() {
 			addChild(pirateLayer);
 			stage.scaleMode = StageScaleMode.NO_SCALE;
+			
 			pirateArray.push(pirate1, pirate2, pirate3, pirate4);
 			pirateTimer.addEventListener(TimerEvent.TIMER, addAPirate);
 			addEventListener(Event.ENTER_FRAME, didPirateHitTreasure);
+			addEventListener(Event.ENTER_FRAME, pirateHitTest);
+			
+			pirateGoal.x = 300;
+			pirateGoal.y = 0;
+			pirateLayer.addChild(pirateGoal);
+			
 			treasure.x = stage.stageWidth/2;
 			treasure.y = stage.stageHeight/2;
 			pirateLayer.addChild(treasure);
 			pirateTimer.start();
 		}
+		private function pirateHitTest(e:Event):void 
+		{
+			if(pirateMan.hitTestPoint(mouseX, mouseY) && pirateMan.status == "Alive"){
+				pirateLayer.removeChild(pirateMan);
+				//fixed? 
+				//removeEventListener(Event.ENTER_FRAME, pirateHitTest);
+				pirateMan.status = "Dead";
+			}
+		}
 		
 		private function didPirateHitTreasure(e:Event):void 
 		{
 				
-					if(pirateMan.hitTestPoint(treasure.x, treasure.y)) {
+					if(pirateMan.hitTestPoint(treasure.x, treasure.y) && pirateMan.status == "Alive") {
 						pirateWithTreasure.x = pirateMan.x;
 						pirateWithTreasure.y = pirateMan.y;
 						pirateLayer.removeChild(treasure);
@@ -44,7 +62,31 @@
 						removeEventListener(Event.ENTER_FRAME, didPirateHitTreasure);
 						removeEventListener(Event.ENTER_FRAME, movePirateToTreasure);
 						pirateTimer.removeEventListener(TimerEvent.TIMER, addAPirate);
+						pirateWithTreasure.addEventListener(Event.ENTER_FRAME, movePirateToPad);
 					}
+		}
+		
+		private function movePirateToPad(e:Event):void
+		{
+			var speed = 5;
+					if(e.currentTarget.x > pirateGoal.x)
+					{
+						e.currentTarget.x -= speed;
+						
+					}
+					else if(e.currentTarget.x < pirateGoal.x)
+					   {
+						   e.currentTarget.x += speed;
+					   }
+					 else if (e.currentTarget.y > pirateGoal.y)
+					 {
+						 e.currentTarget.y -= speed;
+					 }
+					 else if (e.currentTarget.y < pirateGoal.y)
+					 {
+						 e.currentTarget.y += speed;
+					 }
+			
 		}
 		
 		private function addAPirate(timer:TimerEvent):void {
@@ -79,6 +121,7 @@
 				trace(i);
 				mName.x = pirateX;
 				mName.y = pirateY;
+				mName.status = "Alive";
 				pirateLayer.addChild(mName);
 				
 				pirateTimer.start();
