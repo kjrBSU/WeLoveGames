@@ -30,33 +30,40 @@
 		private var pirateWithTreasure:Boolean = false;
 		private var treasure:Treasure = new Treasure();
 		private var pirateArray:Array = new Array();
-		private var pirateTimer:Timer = new Timer (5000);
+		private var pirateTimer:Timer = new Timer (30000);
 		
-		public var pirate1:Object = { mName: pirateMan, xLocation: 300, yLocation: 0};
-		public var pirate2:Object = { mName: pirateMan, xLocation: 600, yLocation: 200};
-		public var pirate3:Object = { mName: pirateMan, xLocation: 300, yLocation: 400};
-		public var pirate4:Object = { mName: pirateMan, xLocation: 0, yLocation: 200};
+		public var pirate1:Object = { mName: pirateMan, xLocation: background.width/2, yLocation: background.height-background.height};
+		public var pirate2:Object = { mName: pirateMan, xLocation: background.width, yLocation: background.height/2};
+		public var pirate3:Object = { mName: pirateMan, xLocation: background.width/2, yLocation: background.height};
+		public var pirate4:Object = { mName: pirateMan, xLocation: background.width - background.width, yLocation: background.height/2};
 		
 		public function ThomasMain() 
 		{
-			trace("got to main");
 			bullets = new Array();
 			
+			background.x = 0;
+			background.y = 0;
 			addChild(background);
 			
 			player = new Player();
+			player.x = stage.stageWidth/2;
+			player.y = stage.stageHeight/2;
 			addChild(player);
 			
+			treasure.x = background.width/2;
+			treasure.y = background.height/2;
+			addChild(treasure);
+			
 			pirateArray.push(pirate1, pirate2, pirate3, pirate4);
-			
-			pirateTimer.start();
-			
+
 			
 			addEventListener(Event.ENTER_FRAME, update);
 			addEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 			pirateTimer.addEventListener(TimerEvent.TIMER, addAPirate);
+			
+			pirateTimer.start();
 		}
 		
 		private function fireBullet(evt:MouseEvent):void
@@ -118,7 +125,10 @@
 		
 		private function update(evt:Event):void
 		{
-			trace("got here");
+			movePirateToTreasure(pirateMan);
+			
+			didPirateHitTreasure(pirateMan);
+			
 			camera(player);
 			
 			player.update();
@@ -187,7 +197,7 @@
 		}
 		
 		private function addAPirate(timer:TimerEvent):void {
-			var mName:pirateClass = new pirateClass();
+			var mName:Pirate = new Pirate();
 			var pirateX:Number;
 			var pirateY:Number;
 			
@@ -220,16 +230,47 @@
 				mName.y = pirateY;
 				mName.status = "Alive";
 				background.addChild(mName);
+				mName.gotoAndStop(1);
 				
 				pirateTimer.start();
 				
 			}
 				
 				
-			
-				
-				
 			}
+			private function movePirateToTreasure(pirate:Pirate):void
+				{
+					var speed = 10;
+					if(pirate.x > treasure.x)
+					{
+						pirate.x -= speed;
+						
+					}
+					else if(pirate.x < treasure.x)
+					   {
+						   pirate.x += speed;
+					   }
+					 else if (pirate.y > treasure.y)
+					 {
+						 pirate.y -= speed;
+					 }
+					 else if (pirate.y < treasure.y)
+					 {
+						 pirate.y += speed;
+					 }
+					 
+					  
+					}
+					
+					private function didPirateHitTreasure(pirate:Pirate):void 
+					{
+							if(contains(treasure)){
+								if(pirate.hitTestPoint(treasure.x, treasure.y) && pirate.status == "Alive") {
+									removeChild(treasure);
+									pirate.gotoAndStop(2);
+								}
+							}
+					}
 		
 
 	}
