@@ -135,7 +135,7 @@ package  {
 			}
 			
 			
-			private function movePirateToTreasure(e:Event):void
+			private function movePirateToTreasure():void
 				{
 					var speed = 5;
 					if(e.currentTarget.x > treasure.x)
