@@ -1,42 +1,60 @@
 ﻿package  {
 	
+	import SkeleBullet;
+	
+	import adobe.utils.CustomActions;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import states.BumpState;
 	import states.ChaseState;
 	import states.IAgentState;
 	import states.InitState;
+	import states.ThrowState;
 	import states.WanderState;
 	
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	
 	public class Skeleton extends MovieClip 
 	{
 		public static const WANDER:IAgentState = new WanderState();
 		public static const BUMP:IAgentState = new BumpState();
 		public static const INIT:IAgentState = new InitState();
+		public static const CHASE:IAgentState = new ChaseState();
+		public static const THROW:IAgentState = new ThrowState();
 		
 		private var _previousState:IAgentState;
 		private var _currentState:IAgentState;
 		
-		public var vx:Number;
-		public var vy:Number;
+		private var _vx:Number;
+		private var _vy:Number;
 		
 		public var speed:Number;
 		
-		public var _isBump:Boolean;
+		private var _isSkeleBump:Boolean;
+		private var _isPlayerNear:Boolean = false;
+		
+		public var chaseRadius:Number = 500;
+		public var throwRadius:Number = 450;
+		private var _hitRadius:Number = 1;
+		
+		public var _target:MovieClip;
+		
+		public var bulletsAdded:Array = new Array()
+		
 		
 		public function Skeleton() 
 		{
-			vx = Math.random() - Math.random();
-			vy = Math.random() - Math.random();
-			_isBump = false;
+			vx =  0//Math.random() - Math.random();
+			vy = - 1//Math.random() - Math.random();
+			_isSkeleBump = false;
 			speed = 5;
 			_currentState = WANDER;
 		}
 		
 		public function update():void 
 		{
+			
 			if (!_currentState) return;
 			_currentState.update(this);
 			//trace ("Spoopy Skeleton Update!");
@@ -53,26 +71,114 @@
 			_currentState.enter(this);
 		}
 		
-		public function get previousState():IAgentState { return _previousState; }
+		public function set target(target:MovieClip):void 
+		{
+			_target = target;
+		}
 		
-		public function get currentState():IAgentState { return _currentState; }
+		public function set isSkeleBump(i:Boolean):void
+		{
+			_isSkeleBump = i;
+		}
 		
-		public function get isBump():Boolean { return _isBump; }
+		public function set vx(vx:Number):void 
+		{
+			_vx = vx;
+		}
 		
-		public function move():void {
+		public function set vy(vy:Number):void
+		{
+			_vy = vy;
+		}
+		public function get vx(): Number  
+		{
+			return _vx;
+		}
+		
+		public function get vy(): Number
+		{
+			return _vy;
+		}
+		
+		public function get target(): MovieClip 
+		{
+			return _target;
+		}
+		
+		public function get previousState():IAgentState 
+		{ 
+			return _previousState;
+		}
+		
+		public function get currentState():IAgentState 
+		{ 
+			return _currentState; 	
+		}
+		
+		public function get isBump():Boolean 
+		{
+			return _isSkeleBump;
+		}
+		
+		public function get isPlayerNear():Boolean
+		{
+			return _isPlayerNear;
+		}
+		
+		public function move():void 
+		{
 			var angle = Math.atan2(this.vy * Math.PI, this.vx * Math.PI); 
 			this.x += Math.cos(angle) * speed;
 			this.y += Math.sin(angle) * speed;
 		}
 		
-		public function isHit(dspOb:DisplayObject):void {
+		public function didHitObject(dspOb:DisplayObject):void 
+		{	
 				if (this.hitTestObject(dspOb) == true)
 				{
-					_isBump = true
+					_isSkeleBump = true
 				}
+				
+				/*else if (this.hitTestObject(dspOb) != true )
+				{
+					_isSkeleBump = false;
+				}*/
+		}
+		
+		public function distanceToPlayer(): Number
+		{
+			var dx:Number = _target.x - this.x;
+			var dy:Number = _target.y - this.y;
+			var distance = Math.sqrt(dx * dx + dy * dy);
+			
+			return distance;
+		}
+		
+		public function moveTowardPlayer()
+		{
+			var dx:Number = _target.x - this.x;
+			var dy:Number = _target.y - this.y;
+			var angle = Math.atan2(dy, dx);
+			this.x += Math.cos(angle) * speed;
+			this.y += Math.sin(angle) * speed; 
+		}
+		
+		public function createBullet(): MovieClip
+		{
+			var bullet:SkeleBullet = new SkeleBullet();
+			
+			bullet.x = this.x;
+			bullet.y = this.y;
+			
+			return bullet;
+		}
+		
+		public function drawBullets():void
+		{
+			for each(var b:MovieClip in bulletsAdded)
+			{
+				parent.addChild(b);
+			}
 		}
 	}
-	
-
-	
 }

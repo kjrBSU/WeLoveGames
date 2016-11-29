@@ -31,7 +31,7 @@ package states
 			s.vx = s.vx + (Math.random() - Math.random());
 			s.vy = s.vy + (Math.random() - Math.random());
 			trace("Exit Bump");
-			s._isBump = false;
+			s.isSkeleBump = false;
 		}
 	}
 }

@@ -8,13 +8,17 @@ package states
 		
 		public function update(s:Skeleton):void
 		{
-		
-			if (s.distanceToObject() > s.chaseRadius) {
-				s.setState(Skeleton.CONFUSED);
-			}
-			if (s.distanceToObject() < s.fleeRadius) {
-				s.setState(Skeleton.FLEE);
-			}
+			/*var dx = s._target.x - s.x;
+			var dy = s._target.y - s.y;
+			var angle = Math.atan2(dy, dx);
+			s.vx = Math.cos(angle);
+			s.vy = Math.sin(angle);
+			*/
+			s.moveTowardPlayer();
+			if (s.distanceToPlayer() < s.throwRadius)
+					{
+						s.setState(Skeleton.THROW);
+					}
 		}
 		
 		public function enter(s:Skeleton):void
