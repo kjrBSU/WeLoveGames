@@ -8,34 +8,55 @@
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;	
 	import flash.geom.*;
+	import flash.utils.Timer;
+	import flash.events.TimerEvent;
 	import Player;
 	import Particle;
+	import Pirate;
+	import Treasure;
 	
 	
-	public class Main extends MovieClip {
+	
+	
+	public class ThomasMain extends MovieClip {
 		
 		private var player:Player;
-	    private var background:Sprite;
+	    private var background:Map = new Map();
 		private var bullet:Bullet;
 		private var bullets:Array;
 		private var shotAngle:Number;
 		
-		public function Main() 
+		private var pirateMan:Pirate = new Pirate();
+		private var pirateWithTreasure:Boolean = false;
+		private var treasure:Treasure = new Treasure();
+		private var pirateArray:Array = new Array();
+		private var pirateTimer:Timer = new Timer (5000);
+		
+		public var pirate1:Object = { mName: pirateMan, xLocation: 300, yLocation: 0};
+		public var pirate2:Object = { mName: pirateMan, xLocation: 600, yLocation: 200};
+		public var pirate3:Object = { mName: pirateMan, xLocation: 300, yLocation: 400};
+		public var pirate4:Object = { mName: pirateMan, xLocation: 0, yLocation: 200};
+		
+		public function ThomasMain() 
 		{
-			
+			trace("got to main");
 			bullets = new Array();
 			
-			background = new Map();			
 			addChild(background);
 			
 			player = new Player();
 			addChild(player);
 			
-
+			pirateArray.push(pirate1, pirate2, pirate3, pirate4);
+			
+			pirateTimer.start();
+			
+			
 			addEventListener(Event.ENTER_FRAME, update);
 			addEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+			pirateTimer.addEventListener(TimerEvent.TIMER, addAPirate);
 		}
 		
 		private function fireBullet(evt:MouseEvent):void
@@ -97,7 +118,7 @@
 		
 		private function update(evt:Event):void
 		{
-			
+			trace("got here");
 			camera(player);
 			
 			player.update();
@@ -164,6 +185,51 @@
 				trace("Failed to delete bullet!", e);
 			}
 		}
+		
+		private function addAPirate(timer:TimerEvent):void {
+			var mName:pirateClass = new pirateClass();
+			var pirateX:Number;
+			var pirateY:Number;
+			
+			pirateTimer.reset();
+			trace("timer done");
+			var i:Number;
+			
+			for (var j:int = 0; j < 1; j++) {
+			for (var element:String in pirateArray[i = Math.floor(Math.random()*pirateArray.length)]) {
+				
+					if(element == "mName" && element != "xLocation" && element != "yLocation") {
+						mName = pirateArray[i][element];
+						trace (mName);
+					}
+					else if (element == "xLocation" && element != "mName" && element != "yLocation") {
+						trace (pirateArray [i][element]);
+						pirateX = pirateArray[i][element];
+						
+					}
+					else if (element == "yLocation" && element != "mName" && element != "xLocation") {
+						trace (pirateArray[i][element]);
+						pirateY = pirateArray[i][element];
+						
+
+					}
+					
+				}
+				trace(i);
+				mName.x = pirateX;
+				mName.y = pirateY;
+				mName.status = "Alive";
+				background.addChild(mName);
+				
+				pirateTimer.start();
+				
+			}
+				
+				
+			
+				
+				
+			}
 		
 
 	}
