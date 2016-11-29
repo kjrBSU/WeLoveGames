@@ -29,8 +29,9 @@
 		private var pirateMan: Pirate = new Pirate();
 		private var pirateWithTreasure: Boolean = false;
 		private var treasure: Treasure = new Treasure();
+		private var piratePad:Point = new Point();
 		private var pirateArray: Array = new Array();
-		private var pirateTimer: Timer = new Timer(30000);
+		private var pirateTimer: Timer = new Timer(10000);
 
 		public var pirate1: Object = {
 			mName: pirateMan,
@@ -132,11 +133,15 @@
 		}
 
 		private function update(evt: Event): void {
+			if(pirateMan.currentFrame == 1){
 			movePirateToTreasure(pirateMan);
-
+			}
+			else if(pirateMan.currentFrame == 2){
+				movePirateToPad(pirateMan);
+			}
 			didPirateHitTreasure(pirateMan);
-
-			camera(skeleton);
+		
+			camera(player);
 
 			player.update();
 
@@ -236,8 +241,40 @@
 
 
 		}
+		
+		private function setPiratePad():void {
+			
+			var padX:Number;
+			var padY:Number;
+			var i:uint;
+
+					for (var j: int = 0; j < 1; j++) {
+						for (var element: String in pirateArray[i = Math.floor(Math.random() * pirateArray.length)]) {
+
+							if (element == "xLocation" && element != "yLocation") {
+								
+								padX = pirateArray[i][element];
+
+							} else if (element == "yLocation"&& element != "xLocation") {
+								
+								padY = pirateArray[i][element];
+							}
+							piratePad.x = padX;
+							piratePad.y = padY;
+
+						}
+				}
+			}
+			private function movePirateToPad(pirate:Pirate):void {
+				var speed:Number = 25;
+				var dx:Number = pirate.x - piratePad.x;
+				var dy:Number = pirate.y - piratePad.y;
+				var angle = Math.atan2(dy, dx);
+				pirate.x += Math.cos(angle) * speed;
+				pirate.y += Math.sin(angle) * speed;
+			}
 		private function movePirateToTreasure(pirate: Pirate): void {
-			var speed = 10;
+			var speed = 25;
 			if (pirate.x > treasure.x) {
 				pirate.x -= speed;
 
@@ -257,6 +294,7 @@
 				if (pirate.hitTestPoint(treasure.x, treasure.y) && pirate.status == "Alive") {
 					removeChild(treasure);
 					pirate.gotoAndStop(2);
+					setPiratePad();
 				}
 			}
 		}
