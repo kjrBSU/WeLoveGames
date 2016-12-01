@@ -1,4 +1,4 @@
-package states 
+﻿package states 
 {
 	import flash.display.MovieClip;
 	import Skeleton;
@@ -14,11 +14,12 @@ package states
 			s.moveTowardPlayer();
 			if (frame > shootFrame) 
 			{
-				var bullet:MovieClip = s.createBullet();
-				s.bulletsAdded.push(bullet);
+				//var bullet:SkeleBullet = s.createBullet();
+				//s.bulletsAdded.push(bullet); 
+				//s.fireBullet(bullet);
 				frame = 0;
 			}
-			for each (var b:MovieClip in s.bulletsAdded)
+			/*for each (var b:MovieClip in s.bulletsAdded)
 			{
 				var dx:Number = s.target.x - s.x;
 				var dy:Number = s.target.y - s.y;
@@ -26,8 +27,10 @@ package states
 				b.x += Math.cos(angle) * 10;
 				b.y += Math.sin(angle) * 10; 
 				s.drawBullets();
-			}
+			}*/
 			frame++;
+			s.drawBullets();
+
 		}
 		
 		public function enter(s:Skeleton):void 
