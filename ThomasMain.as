@@ -177,27 +177,30 @@
 				if (bullet.life <= 0) {
 					killBullet(bullet);
 				} else if (bullet.interacts) {
-					for each(var targetPirate: Pirate in pirates) {
-						if (targetPirate.hitTestPoint(bullet.x, bullet.y)) {
-							targetPirate.life -= 100;
+					//for each(var targetPirate: Pirate in pirates) {
+						if (pirateMan.hitTestPoint(bullet.x, bullet.y)) {
+							pirateMan.life -= 100;
 							killBullet(bullet);
 							break;
 						}
-					}
+					//}
 				}
 			}
 
-			for each(var pirate: Pirate in pirates) {
-				if (pirate.life == 0) {
-					killPirate(pirate);
+			//for each(var pirate: Pirate in pirates) {
+				if (pirateMan.life == 0) {
+					killPirate(pirateMan);
 				}
-			}
+			//}
 			skeleton.update();
 			skeleBump();
 		}
 
 		private function killPirate(pirate: Pirate): void {
-			if (contains(pirate)) {
+			if(contains(pirateMan)){
+			background.removeChild(pirateMan);
+			}
+			/*if (contains(pirate)) {
 				try {
 					var i: int;
 					for (i = 0; i < pirates.length; i++) {
@@ -210,7 +213,7 @@
 				} catch (e: Error) {
 					trace("failed to delete pirate", e);
 				}
-			}
+			}*/
 		}
 		//private function didBulletHitPirate(bullet: Particle): void {
 
@@ -273,7 +276,7 @@
 		}
 
 		private function addAPirate(timer: TimerEvent): void {
-
+			pirateMan = new Pirate();
 			pirateTimer.reset();
 			trace("timer done");
 			pirateTimer.start();
@@ -283,6 +286,7 @@
 			pirateMan.y = point.y;
 			trace(point);
 			background.addChild(pirateMan);
+			pirates.push(pirateMan);
 			pirateMan.gotoAndStop(1);
 		}
 
