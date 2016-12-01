@@ -165,8 +165,8 @@
 		private function killPirate(pirate: Pirate): void {
 			if(contains(pirateMan)){
 				if(pirateMan.currentFrame == 2){
-					treasure.x = pirateMan.x;
-					treasure.y = pirateMan.y;
+					treasure.x = background.width/2;
+					treasure.y = background.height/2;
 					background.addChild(treasure);
 					treasure.dropped = true;
 				}
