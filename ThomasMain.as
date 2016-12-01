@@ -27,7 +27,6 @@
 		private var shotAngle: Number;
 
 		private var pirateMan: Pirate = new Pirate();
-		//private var pirateHealth: pirateHealthBar = new pirateHealthBar();
 		private var treasure: Treasure = new Treasure();
 		private var piratePad: Point = new Point();
 		private var topPirate: Point = new Point(background.width / 2, 0);
@@ -36,34 +35,11 @@
 		private var leftPirate: Point = new Point(0, background.height / 2);
 		private var piratePoints: Array = new Array();
 		private var pirates: Array = new Array();
-		private var pirateTimer: Timer = new Timer(10000);
-
-		/*public var pirate1: Object = {
-			mName: pirateMan,
-			xLocation: background.width / 2,
-			yLocation: background.height - background.height
-		};
-		public var pirate2: Object = {
-			mName: pirateMan,
-			xLocation: background.width,
-			yLocation: background.height / 2
-		};
-		public var pirate3: Object = {
-			mName: pirateMan,
-			xLocation: background.width / 2,
-			yLocation: background.height
-		};
-		public var pirate4: Object = {
-			mName: pirateMan,
-			xLocation: background.width - background.width,
-			yLocation: background.height / 2
-		};*/
+		private var pirateTimer: Timer = new Timer(15000);
 
 		public var skeleton: Skeleton = new Skeleton();
 
 		public function ThomasMain() {
-
-			trace(topPirate);
 
 			bullets = new Array();
 
@@ -78,9 +54,7 @@
 
 			treasure.x = background.width / 2;
 			treasure.y = background.height / 2;
-			addChild(treasure);
-
-			//pirateHealth.width = 100;
+			background.addChild(treasure);
 
 			skeleton.x = background.width / 2;
 			skeleton.y = background.height / 2;
@@ -156,10 +130,6 @@
 			}
 			didPirateHitTreasure(pirateMan);
 
-			/*for each(var b: Bullet in bullets) {
-				didBulletHitPirate(b);
-			}*/
-
 			camera(player);
 
 			player.update();
@@ -177,65 +147,32 @@
 				if (bullet.life <= 0) {
 					killBullet(bullet);
 				} else if (bullet.interacts) {
-					//for each(var targetPirate: Pirate in pirates) {
 						if (pirateMan.hitTestPoint(bullet.x, bullet.y)) {
 							pirateMan.life -= 100;
 							killBullet(bullet);
 							break;
 						}
-					//}
 				}
 			}
 
-			//for each(var pirate: Pirate in pirates) {
 				if (pirateMan.life == 0) {
 					killPirate(pirateMan);
 				}
-			//}
 			skeleton.update();
 			skeleBump();
 		}
 
 		private function killPirate(pirate: Pirate): void {
 			if(contains(pirateMan)){
+				if(pirateMan.currentFrame == 2){
+					treasure.x = pirateMan.x;
+					treasure.y = pirateMan.y;
+					background.addChild(treasure);
+					treasure.dropped = true;
+				}
 			background.removeChild(pirateMan);
 			}
-			/*if (contains(pirate)) {
-				try {
-					var i: int;
-					for (i = 0; i < pirates.length; i++) {
-						if (pirates[i].name == pirate.name) {
-							pirates.splice(i, 1);
-							background.removeChild(pirate);
-							i = pirates.length;
-						}
-					}
-				} catch (e: Error) {
-					trace("failed to delete pirate", e);
-				}
-			}*/
 		}
-		//private function didBulletHitPirate(bullet: Particle): void {
-
-		//	for each(var pirate: Pirate in pirates) {
-		//		if (contains(pirate) && contains(pirateHealth)) {
-		//			if (pirate.hitTestPoint(bullet.x, bullet.y) && pirate.status == "Alive") {
-		//				pirateHealth.width -= 50;
-		//				killBullet(bullet);
-
-		//			}
-		//			if (pirateHealth.width < 1) {
-		//				//pirateHealth.width = 100;
-		//				pirate.removeChild(pirateHealth);
-		//				//pirateHealth = null;
-		//				//pirateHealth = new pirateHealthBar;
-		//				
-		//				background.removeChild(pirate);
-		//				
-		//			}
-		//		}
-		//	}
-		//}
 
 		private function camera(char: Sprite): void {
 			root.scrollRect = new Rectangle(char.x - stage.stageWidth / 2, char.y - stage.height / 2, stage.stageWidth, stage.stageHeight);
@@ -248,25 +185,6 @@
 					if (bullets[i].name == bullet.name) {
 						bullets.splice(i, 1);
 						removeChild(bullet);
-
-						/*if (bullet.interacts)
-						{
-							var j:int;
-							for (j = 0; j < splodeNum; j++)
-							{
-								var splode:Particle = new Explosion();
-								splode.scaleX = splode.scaleY = 1 + Math.random();
-								splode.x = arrow.x;
-								splode.y = arrow.y;
-								splode.xVel = Math.random() * splodeSpread - splodeSpread / 2;
-								splode.yVel = Math.random() * splodeSpread - splodeSpread / 2;
-								splode.life = 20;
-								splode.interacts = false;
-								arrows.push(splode);
-								particlesLayer.addChild(splode);
-							}
-						}*/
-
 						i = bullets.length;
 					}
 				}
@@ -301,7 +219,7 @@
 			
 		}
 		private function movePirateToPad(pirate: Pirate): void {
-			var speed: Number = 25;
+			var speed: Number = 15;
 			var dx: Number = pirate.x - piratePad.x;
 			var dy: Number = pirate.y - piratePad.y;
 			var angle = Math.atan2(dy, dx);
@@ -309,8 +227,15 @@
 			pirate.y += Math.sin(angle) * speed;
 		}
 		private function movePirateToTreasure(pirate: Pirate): void {
-			var speed = 25;
-			if (pirate.x > treasure.x) {
+			var speed = 15;
+			if(pirateMan != null){
+			var dx: Number = treasure.x - pirate.x;
+			var dy: Number = treasure.y - pirate.y;
+			var angle = Math.atan2(dy, dx);
+			pirate.x += Math.cos(angle) * speed;
+			pirate.y += Math.sin(angle) * speed;
+			}
+			/*if (pirate.x > treasure.x) {
 				pirate.x -= speed;
 
 			} else if (pirate.x < treasure.x) {
@@ -319,7 +244,7 @@
 				pirate.y -= speed;
 			} else if (pirate.y < treasure.y) {
 				pirate.y += speed;
-			}
+			}*/
 
 
 		}
@@ -327,7 +252,7 @@
 		private function didPirateHitTreasure(pirate: Pirate): void {
 			if (contains(treasure)) {
 				if (pirate.hitTestPoint(treasure.x, treasure.y) && pirate.status == "Alive") {
-					removeChild(treasure);
+					background.removeChild(treasure);
 					pirate.gotoAndStop(2);
 					setPiratePad();
 				}
