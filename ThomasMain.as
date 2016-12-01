@@ -55,6 +55,7 @@
 		};
 
 		public var skeleton:Skeleton = new Skeleton();
+		/*public var boneyBullet:SkeleBullet = new SkeleBullet();*/
 		
 		public function ThomasMain() {
 			bullets = new Array();
@@ -76,6 +77,12 @@
 			skeleton.y = background.height / 2;
 			addChild(skeleton);
 			skeleton.target = player;
+			
+			/*boneyBullet.x = background.width / 2;
+			boneyBullet.y = background.height / 2 + 100;
+			addChild(boneyBullet);*/
+			
+			
 
 			pirateArray.push(pirate1, pirate2, pirate3, pirate4);
 
