@@ -45,8 +45,8 @@
 		
 		public function Skeleton()
 		{
-			vx = 0//Math.random() - Math.random();
-			vy = -1//Math.random() - Math.random();
+			vx = Math.random() - Math.random();
+			vy = Math.random() - Math.random();
 			_isSkeleBump = false;
 			speed = 5;
 			_currentState = WANDER;
