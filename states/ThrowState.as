@@ -12,6 +12,10 @@
 		
 		public function update(s:Skeleton):void
 		{
+			if (s.distanceToPlayer() > s.throwRadius)
+			{
+				s.setState(Skeleton.CHASE);
+			}
 			s.moveTowardPlayer();
 			if (frame > shootFrame)
 			{
@@ -26,16 +30,6 @@
 				s.bulletsFired.push(bullet);
 				
 				frame = 0;
-			}
-			for each (var b:Particle in s.bulletsFired)
-			{
-				s.parent.addChild(b);
-				if (b.life < 1)
-				{
-					s.bulletsFired.removeAt(s.bulletsFired.indexOf(b));
-					s.parent.removeChild(b);
-				}
-				b.update();
 			}
 			frame++;
 		
