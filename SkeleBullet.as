@@ -1,14 +1,12 @@
-﻿package  {
+﻿package
+{
 	
 	import flash.display.MovieClip;
+	import Skeleton;
 	
+	public class SkeleBullet extends Particle
+	{
 	
-	public class SkeleBullet extends MovieClip {
-		
-		
-		public function SkeleBullet() {
-			// constructor code
-		}
 	}
-	
 }
+

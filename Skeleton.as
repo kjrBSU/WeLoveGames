@@ -41,7 +41,7 @@
 		
 		public var _target:MovieClip;
 		
-		public var bulletsAdded:Array = new Array()
+		public var bulletsFired:Vector.<Particle> = new Vector.<Particle>();
 		
 		public function Skeleton()
 		{
@@ -140,11 +140,6 @@
 			{
 				_isSkeleBump = true
 			}
-		
-		/*else if (this.hitTestObject(dspOb) != true )
-		   {
-		   _isSkeleBump = false;
-		   }*/
 		}
 		
 		public function distanceToPlayer():Number
@@ -165,32 +160,5 @@
 			this.y += Math.sin(angle) * speed;
 		}
 		
-		public function createBullet(): SkeleBullet
-		{
-			var bullet:SkeleBullet = new SkeleBullet();
-			
-			bullet.x = this.x;
-			bullet.y = this.y;
-			
-			return bullet;
-		}
-		
-		public function fireBullet(b:SkeleBullet):void 
-		{
-			var dx:Number = this.target.x - b.x;
-			var dy:Number = this.target.y - b.y;
-			var angle = Math.atan2(dy, dx);
-			b.x += Math.cos(angle) * 10;
-			b.y += Math.sin(angle) * 10;
-		}
-		
-		public function drawBullets():void
-		{
-			for each (var b:MovieClip in bulletsAdded)
-			{
-				parent.addChild(b);
-				
-			}
-		}
 	}
 }
