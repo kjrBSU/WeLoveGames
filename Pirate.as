@@ -7,15 +7,13 @@
 	public class Pirate extends MovieClip {
 		public var speed: Number = 10;
 		public var status: String = "Alive";
-
-		public function movePirate(): void {
-
-			this.x += zFriction(this.x, stage.stageWidth / 2, 1);
-			this.y += zFriction(this.y, stage.stageHeight / 2, 1);
+		public var life: Number = 200;
+		
+		public function Pirate():void {
+			
 		}
-		public function zFriction(startPosition: Number, destination: Number, coeff: Number): Number {
-			return (destination - startPosition) / coeff;
-		}
+
+		
 	}
 
 
