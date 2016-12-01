@@ -10,11 +10,11 @@
 		public var airResistance:Number;
 		public var life:Number;
 		public var interacts:Boolean;
-		public var ownedByHero:Boolean;
+		public var ownedByPlayer:Boolean;
 		
 		public function Particle()
 		{
-			ownedByHero = true;
+			ownedByPlayer = true;
 			interacts = true;
 			life = 200;
 			xVel = 0;
