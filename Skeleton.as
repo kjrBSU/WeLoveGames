@@ -3,7 +3,6 @@
 	
 	import SkeleBullet;
 	
-	import adobe.utils.CustomActions;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import states.BumpState;
