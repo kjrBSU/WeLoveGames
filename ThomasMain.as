@@ -28,14 +28,17 @@
 
 		private var pirateMan: Pirate = new Pirate();
 		//private var pirateHealth: pirateHealthBar = new pirateHealthBar();
-		private var pirateWithTreasure: Boolean = false;
 		private var treasure: Treasure = new Treasure();
 		private var piratePad: Point = new Point();
-		private var pirateArray: Array = new Array();
+		private var topPirate: Point = new Point(background.width / 2, 0);
+		private var bottomPirate: Point = new Point(background.width / 2, background.height);
+		private var rightPirate: Point = new Point(background.width, background.height / 2);
+		private var leftPirate: Point = new Point(0, background.height / 2);
+		private var piratePoints: Array = new Array();
 		private var pirates: Array = new Array();
 		private var pirateTimer: Timer = new Timer(10000);
 
-		public var pirate1: Object = {
+		/*public var pirate1: Object = {
 			mName: pirateMan,
 			xLocation: background.width / 2,
 			yLocation: background.height - background.height
@@ -54,11 +57,14 @@
 			mName: pirateMan,
 			xLocation: background.width - background.width,
 			yLocation: background.height / 2
-		};
+		};*/
 
 		public var skeleton: Skeleton = new Skeleton();
 
 		public function ThomasMain() {
+
+			trace(topPirate);
+
 			bullets = new Array();
 
 			background.x = 0;
@@ -73,21 +79,21 @@
 			treasure.x = background.width / 2;
 			treasure.y = background.height / 2;
 			addChild(treasure);
-			
+
 			//pirateHealth.width = 100;
 
 			skeleton.x = background.width / 2;
 			skeleton.y = background.height / 2;
 			addChild(skeleton);
 			skeleton.target = player;
-			
+
 			/*boneyBullet.x = background.width / 2;
 			boneyBullet.y = background.height / 2 + 100;
 			addChild(boneyBullet);*/
-			
-			
 
-			pirateArray.push(pirate1, pirate2, pirate3, pirate4);
+
+
+			piratePoints.push(topPirate, bottomPirate, leftPirate, rightPirate);
 
 
 			addEventListener(Event.ENTER_FRAME, update);
@@ -149,11 +155,11 @@
 				movePirateToPad(pirateMan);
 			}
 			didPirateHitTreasure(pirateMan);
-			
+
 			/*for each(var b: Bullet in bullets) {
 				didBulletHitPirate(b);
 			}*/
-			
+
 			camera(player);
 
 			player.update();
@@ -170,39 +176,38 @@
 
 				if (bullet.life <= 0) {
 					killBullet(bullet);
-				} else if(bullet.interacts){
-						for each(var targetPirate:Pirate in pirates){
-							if(targetPirate.hitTestPoint(bullet.x, bullet.y)){
-								targetPirate.life -= 100;
-								killBullet(bullet);
-								break;
-							}
+				} else if (bullet.interacts) {
+					for each(var targetPirate: Pirate in pirates) {
+						if (targetPirate.hitTestPoint(bullet.x, bullet.y)) {
+							targetPirate.life -= 100;
+							killBullet(bullet);
+							break;
 						}
 					}
 				}
-			
-			for each(var pirate:Pirate in pirates){
-				if(pirate.life == 0){
+			}
+
+			for each(var pirate: Pirate in pirates) {
+				if (pirate.life == 0) {
 					killPirate(pirate);
 				}
 			}
 			skeleton.update();
 			skeleBump();
 		}
-		
-		private function killPirate(pirate:Pirate):void {
-			if(contains(pirate)){
-				try{
-					var i:int;
-					for(i=0; i<pirates.length; i++){
-						if(pirates[i].name == pirate.name){
+
+		private function killPirate(pirate: Pirate): void {
+			if (contains(pirate)) {
+				try {
+					var i: int;
+					for (i = 0; i < pirates.length; i++) {
+						if (pirates[i].name == pirate.name) {
 							pirates.splice(i, 1);
 							background.removeChild(pirate);
 							i = pirates.length;
 						}
 					}
-				}
-				catch(e:Error){
+				} catch (e: Error) {
 					trace("failed to delete pirate", e);
 				}
 			}
@@ -268,69 +273,28 @@
 		}
 
 		private function addAPirate(timer: TimerEvent): void {
-			var mName = pirateMan;
-			var pirateX: Number;
-			var pirateY: Number;
 
 			pirateTimer.reset();
 			trace("timer done");
+			pirateTimer.start();
 			var i: Number;
-
-			for (var j: int = 0; j < 1; j++) {
-				for (var element: String in pirateArray[i = Math.floor(Math.random() * pirateArray.length)]) {
-
-					if (element == "mName" && element != "xLocation" && element != "yLocation") {
-						mName = pirateArray[i][element];
-						trace(mName);
-					} else if (element == "xLocation" && element != "mName" && element != "yLocation") {
-						trace(pirateArray[i][element]);
-						pirateX = pirateArray[i][element];
-
-					} else if (element == "yLocation" && element != "mName" && element != "xLocation") {
-						trace(pirateArray[i][element]);
-						pirateY = pirateArray[i][element];
-
-
-					}
-
-				}
-				trace(i);
-				mName.x = pirateX;
-				mName.y = pirateY;
-				mName.status = "Alive";
-				background.addChild(mName);
-				mName.gotoAndStop(1);
-				pirates.push(mName);
-
-				pirateTimer.start();
-
-			}
-
-
+			var point: Point = piratePoints[i = Math.floor(Math.random() * piratePoints.length)];
+			pirateMan.x = point.x;
+			pirateMan.y = point.y;
+			trace(point);
+			background.addChild(pirateMan);
+			pirateMan.gotoAndStop(1);
 		}
 
 		private function setPiratePad(): void {
+			var i:Number;
+			var point: Point = piratePoints[i = Math.floor(Math.random() * piratePoints.length)];
+			trace(point);
+			trace("setting pirate pad");
 
-			var padX: Number;
-			var padY: Number;
-			var i: uint;
-
-			for (var j: int = 0; j < 1; j++) {
-				for (var element: String in pirateArray[i = Math.floor(Math.random() * pirateArray.length)]) {
-
-					if (element == "xLocation" && element != "yLocation") {
-
-						padX = pirateArray[i][element];
-
-					} else if (element == "yLocation" && element != "xLocation") {
-
-						padY = pirateArray[i][element];
-					}
-					piratePad.x = padX;
-					piratePad.y = padY;
-
-				}
-			}
+			piratePad.x = point.x;
+			piratePad.y = point.y;
+			
 		}
 		private function movePirateToPad(pirate: Pirate): void {
 			var speed: Number = 25;
