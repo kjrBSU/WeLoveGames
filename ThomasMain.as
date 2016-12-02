@@ -35,9 +35,11 @@
 		private var leftPirate: Point = new Point(0, background.height / 2);
 		private var piratePoints: Array = new Array();
 		private var pirates: Array = new Array();
+		private var skeletons:Vector.<Skeleton> = new Vector.<Skeleton>();
 		private var pirateTimer: Timer = new Timer(15000);
 
-		public var skeleton: Skeleton = new Skeleton();
+		private var skeleton:Skeleton = new Skeleton();
+		private var skeleton2:Skeleton = new Skeleton();
 
 		public function ThomasMain() {
 
@@ -60,7 +62,13 @@
 			skeleton.y = background.height / 2;
 			addChild(skeleton);
 			skeleton.target = player;
-
+			
+			skeleton2.x = background.width / 2;
+			skeleton2.y = background.height / 2 + 100;
+			addChild(skeleton2);
+			skeleton2.target = player;
+			
+			skeletons.push(skeleton, skeleton2);
 			/*boneyBullet.x = background.width / 2;
 			boneyBullet.y = background.height / 2 + 100;
 			addChild(boneyBullet);*/
@@ -157,9 +165,26 @@
 
 				if (pirateMan.life == 0) {
 					killPirate(pirateMan);
+					background.removeChild(pirateMan);
 				}
-			skeleton.update();
-			skeleBump();
+				
+			for each (var s:Skeleton in skeletons)
+			{
+				trace(s);
+				s.update();
+				for each (var b:Particle in s.bulletsFired)
+				{
+					s.parent.addChild(b);
+					if (b.life < 1)
+					{
+						s.bulletsFired.removeAt(s.bulletsFired.indexOf(b));
+						s.parent.removeChild(b);
+					}
+					b.update();
+				}
+			}
+			
+			Collision();
 		}
 
 		private function killPirate(pirate: Pirate): void {
@@ -259,12 +284,18 @@
 			}
 		}
 
-		public function skeleBump(): void {
-			for (var i: int = 0; i < background.numChildren; i++) {
-				if (String(background.getChildAt(i)) == "[object MapBound]")
-				//{
+		public function Collision():void
+		{
+			for (var i:int = 0; i < background.numChildren; i++)
+			{
+				if (typeof(i) == "Skeleton")
+				{
+					if (String(background.getChildAt(i)) == "[object MapBound]")
+					{
 					skeleton.didHitObject(background.getChildAt(i));
-				//}
+					}
+				}
+				
 			}
 		}
 
