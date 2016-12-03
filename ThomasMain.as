@@ -124,13 +124,10 @@
 					}
 				}
 			}
-			
-			if (pirateMan.life == 0)
-			{
-				killPirate(pirateMan);
-				background.removeChild(pirateMan);
-			}
-			
+				if (pirateMan.life == 0)
+				{
+					killPirate(pirateMan);
+				}
 			for each (var s:Skeleton in skeletons)
 			{
 				s.update();
