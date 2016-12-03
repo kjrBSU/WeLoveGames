@@ -53,8 +53,8 @@
 			addChild(background);
 			
 			player = new Player();
-			player.x = stage.stageWidth / 2;
-			player.y = stage.stageHeight / 2;
+			player.x = 200;
+			player.y = 200;
 			addChild(player);
 			
 			treasure.x = background.width / 2;
@@ -324,6 +324,9 @@
 					for each (var skele:Skeleton in skeletons)
 					{
 						skele.didHitObject(background.getChildAt(i));
+					}
+					if(player.hitTestObject(background.getChildAt(i))){
+						player.didHitObject(background.getChildAt(i));
 					}
 				}
 				
