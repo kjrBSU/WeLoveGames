@@ -10,7 +10,10 @@
 	import flash.ui.Keyboard;
 	import flash.geom.*;
 	import flash.utils.Timer;
+	import flash.utils.getQualifiedClassName;
 	import flash.events.TimerEvent;
+	
+	import MapBound
 	import Player;
 	import Particle;
 	import Pirate;
@@ -144,7 +147,7 @@
 				}
 			}
 			
-			Collision();
+			collision();
 		}
 		
 		private function fireBullet(evt:MouseEvent):void
@@ -315,13 +318,16 @@
 			}
 		}
 		
-		public function Collision():void
+		public function collision():void
 		{
 			for (var i:int = 0; i < background.numChildren; i++)
 			{
-				if (typeof(i) == "Skeleton")
+				if (background.getChildAt(i) is MapBound)
 				{
-					trace("hello!");
+					for each (var skele:Skeleton in skeletons)
+					{
+						skele.didHitObject(background.getChildAt(i));
+					}
 				}
 				
 			}
