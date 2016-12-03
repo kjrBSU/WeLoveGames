@@ -38,7 +38,7 @@
 		private var _isPlayerNear:Boolean = false;
 		
 		public var chaseRadius:Number = 500;
-		public var throwRadius:Number = 450;
+		public var throwRadius:Number = 300;
 		private var _hitRadius:Number = 1;
 		
 		public var _target:MovieClip;
@@ -47,8 +47,8 @@
 		
 		public function Skeleton()
 		{
-			vx = Math.random() - Math.random();
-			vy = Math.random() - Math.random();
+			_vx = Math.random() - Math.random();
+			_vy = Math.random() - Math.random();
 			_isSkeleBump = false;
 			speed = 5;
 			_currentState = WANDER;
