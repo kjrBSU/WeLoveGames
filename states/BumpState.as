@@ -9,11 +9,11 @@ package states
 		
 		public function update(s:Skeleton):void
 		{
-			if (frames < maxFrames) 
+			if (s.isBump == true ) 
 			{
 				s.move();
 			}
-			else if (frames >= maxFrames) {
+			else if (s.isBump == false) {
 				s.setState(Skeleton.WANDER);
 			}
 			frames++
@@ -31,7 +31,7 @@ package states
 			s.vx = s.vx + (Math.random() - Math.random());
 			s.vy = s.vy + (Math.random() - Math.random());
 			trace("Exit Bump");
-			s.isSkeleBump = false;
+			//s.isSkeleBump = false;
 		}
 	}
 }

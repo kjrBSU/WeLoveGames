@@ -16,6 +16,10 @@ package states
 			   s.vy = Math.sin(angle);
 			 */
 			s.moveTowardPlayer();
+			if (s.isBump == true) 
+			{
+				s.setState(Skeleton.BUMP);
+			}
 			if (s.distanceToPlayer() < s.throwRadius)
 			{
 				s.setState(Skeleton.THROW);

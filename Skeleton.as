@@ -2,6 +2,7 @@
 {
 	
 	import SkeleBullet;
+	import flash.utils.Timer;
 	
 	import SkeleBullet;
 	
@@ -15,6 +16,8 @@
 	import states.ThrowState;
 	import states.WanderState;
 	
+	import flash.utils.Timer;
+	import flash.events.TimerEvent;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	
@@ -35,6 +38,7 @@
 		public var speed:Number;
 		
 		private var _isSkeleBump:Boolean;
+		private var _bumpTimer = new Timer(500);
 		private var _isPlayerNear:Boolean = false;
 		
 		public var chaseRadius:Number = 500;
@@ -49,16 +53,16 @@
 		{
 			_vx = Math.random() - Math.random();
 			_vy = Math.random() - Math.random();
-			_isSkeleBump = false;
 			speed = 5;
+			//_bumpTimer.addEventListener(TimerEvent.TIMER, _bumpTimerListener);
 			_currentState = WANDER;
 		}
 		
 		public function update():void
 		{
-			
+			//_isSkeleBump = false;
 			if (!_currentState) return;
-			_currentState.update(this);
+			_currentState.update(this);	
 			//trace ("Spoopy Skeleton Update!");
 		}
 		
@@ -140,8 +144,14 @@
 		{
 			if (this.hitTestObject(dspOb) == true)
 			{
-				_isSkeleBump = true
+				_bumpTimer.start();
 			}
+			
+		}
+		
+		private function _bumpTimerListener(e:TimerEvent):void
+		{
+			_isSkeleBump = true;
 		}
 		
 		public function distanceToPlayer():Number

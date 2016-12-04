@@ -12,6 +12,11 @@
 		
 		public function update(s:Skeleton):void
 		{
+			if (s.isBump == true) 
+			{
+				s.setState(Skeleton.BUMP);
+			}
+			
 			if (s.distanceToPlayer() > s.throwRadius)
 			{
 				s.setState(Skeleton.CHASE);
