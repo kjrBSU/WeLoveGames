@@ -38,7 +38,7 @@
 		public var speed:Number;
 		
 		private var _isSkeleBump:Boolean;
-		private var _bumpTimer = new Timer(500);
+		private var _bumperFrames:Number = 0;
 		private var _isPlayerNear:Boolean = false;
 		
 		public var chaseRadius:Number = 500;
@@ -54,7 +54,6 @@
 			_vx = Math.random() - Math.random();
 			_vy = Math.random() - Math.random();
 			speed = 5;
-			//_bumpTimer.addEventListener(TimerEvent.TIMER, _bumpTimerListener);
 			_currentState = WANDER;
 		}
 		
@@ -64,6 +63,17 @@
 			if (!_currentState) return;
 			_currentState.update(this);	
 			//trace ("Spoopy Skeleton Update!");
+			
+			
+				if (_isSkeleBump == true)
+			{
+				_bumperFrames++;
+			}
+			
+			/*if (_bumpTimer.running != true)
+			{
+				_isSkeleBump = false;
+			}*/
 		}
 		
 		public function setState(newState:IAgentState):void
@@ -144,9 +154,23 @@
 		{
 			if (this.hitTestObject(dspOb) == true)
 			{
-				_bumpTimer.start();
+				//_isSkeleBump = true;
+				this.bumperFrames()
+			}
+		}
+		
+		private function bumperFrames():void
+		{
+			if (_bumperFrames < 10)
+			{
+				this._isSkeleBump = true;
 			}
 			
+			else if (_bumperFrames > 10)
+			{
+				this._isSkeleBump = false;
+				_bumperFrames = 0;
+			}
 		}
 		
 		private function _bumpTimerListener(e:TimerEvent):void
