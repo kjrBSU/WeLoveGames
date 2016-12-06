@@ -68,12 +68,12 @@
 
 			skeleton.x = background.width / 2;
 			skeleton.y = background.height / 2;
-			addChild(skeleton);
+			background.addChild(skeleton);
 			skeleton.target = player;
 
 			skeleton2.x = background.width / 2;
 			skeleton2.y = background.height / 2 + 100;
-			addChild(skeleton2);
+			background.addChild(skeleton2);
 			skeleton2.target = player;
 
 			ammoPoints.push(topLeft, topRight, bottomLeft, bottomRight);
@@ -143,11 +143,10 @@
 						}
 					}
 				}
-			} 
+			}
 
 			if (pirateMan.life == 0) {
 				killPirate(pirateMan);
-				background.removeChild(pirateMan);
 			}
 
 			for each(var ammo: Ammo in ammoArray) {
@@ -262,8 +261,9 @@
 					treasure.y = background.height / 2;
 					background.addChild(treasure);
 					treasure.dropped = true;
+					background.removeChild(pirateMan);
 				}
-				background.removeChild(pirateMan);
+				
 			}
 		}
 
@@ -340,13 +340,20 @@
 					for each(var skele: Skeleton in skeletons) {
 						skele.didHitObject(background.getChildAt(i));
 					}
-					if(player.hitTestObject(background.getChildAt(i))){
+
+					if (player.hitTestObject(background.getChildAt(i))) {
 						player.didHitObject(background.getChildAt(i));
 					}
 				}
-				if(background.getChildAt(i) is Pirate){
+				if (background.getChildAt(i) is Pirate) {
 					player.didHitEnemy(pirateMan);
 				}
+				if (background.getChildAt(i) is Skeleton) {
+					for each(var skeletonI: Skeleton in skeletons) {
+						player.didHitEnemy(skeletonI);
+					}
+				}
+
 
 			}
 		}
