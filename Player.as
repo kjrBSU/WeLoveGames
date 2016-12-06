@@ -21,7 +21,7 @@
 		private var collided:Boolean = false;
 		private var takeDamage:Boolean = false;
 		private var damageFrames:Number = 0;
-		private var damageBuffer:Number = 10;
+		private var damageBuffer:Number = 15;
 		private var bumpBuffer:Number = 20;
 		
 		public function Player() {
