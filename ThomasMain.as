@@ -21,6 +21,7 @@
 	public class ThomasMain extends MovieClip {
 
 		private var player: Player;
+		private var playerHealthBar:playerHealth = new playerHealth();
 		private var background: Map = new Map();
 		private var bullet: Bullet;
 		private var bullets: Array;
@@ -48,6 +49,8 @@
 
 		private var skeleton: Skeleton = new Skeleton();
 		private var skeleton2: Skeleton = new Skeleton();
+		
+		private var viewRect:Rectangle = new Rectangle(stage.stageWidth / 2, stage.height / 2, stage.stageWidth, stage.stageHeight);
 
 		public function ThomasMain() {
 
@@ -56,11 +59,16 @@
 			background.x = 0;
 			background.y = 0;
 			addChild(background);
-
+			
+			
 			player = new Player();
 			player.x = 200;
 			player.y = 200;
 			addChild(player);
+			
+			playerHealthBar.x = viewRect.x;
+			playerHealthBar.y = viewRect.y;
+			background.addChild(playerHealthBar);
 
 			treasure.x = background.width / 2;
 			treasure.y = background.height / 2;
@@ -102,7 +110,11 @@
 		}
 
 		private function update(evt: Event): void {
-
+			playerHealthBar.x = viewRect.x + 500;
+			playerHealthBar.y = viewRect.y + 200;
+			
+			playerHealthBar.width = player.life;
+			
 			if (pirateMan.currentFrame == 1) {
 				movePirateToTreasure(pirateMan);
 			} else if (pirateMan.currentFrame == 2) {
@@ -359,7 +371,10 @@
 		}
 
 		private function camera(char: Sprite): void {
-			root.scrollRect = new Rectangle(char.x - stage.stageWidth / 2, char.y - stage.height / 2, stage.stageWidth, stage.stageHeight);
+			viewRect.x = char.x - stage.stageWidth / 2;
+			viewRect.y = char.y - stage.stageHeight /2;
+			root.scrollRect = viewRect;
+			//new Rectangle(char.x - stage.stageWidth / 2, char.y - stage.height / 2, stage.stageWidth, stage.stageHeight);
 		}
 
 	}
