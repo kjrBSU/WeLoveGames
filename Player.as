@@ -19,6 +19,9 @@
 		public var ammo:Number;
 		private var collidedObject:DisplayObject;
 		private var collided:Boolean = false;
+		private var takeDamage:Boolean = false;
+		private var damageFrames:Number = 0;
+		private var damageBuffer:Number = 10;
 		private var bumpBuffer:Number = 20;
 		
 		public function Player() {
@@ -26,7 +29,7 @@
 			xVel = 0;
 			yVel = 0;
 			speed = 1;
-			life = 10;
+			life = 100;
 			ammo = 12;
 			
 		}
@@ -36,6 +39,24 @@
 				collided = true
 				collidedObject = dispObj;
 				stopPlayer();
+			}
+		}
+		public function didHitEnemy(enemy:MovieClip):void {
+			if(this.hitTestObject(enemy) == true)
+			{
+				damage();
+				takeDamage = true;
+				damageFrames++;
+			}
+		}
+		private function damage():void 
+		{
+			if(damageFrames <= damageBuffer && takeDamage == true){
+				life -= 1;
+			}
+			else if (damageFrames >= damageBuffer){
+				takeDamage = false;
+				damageFrames = 0;
 			}
 		}
 		private function stopPlayer():void {
