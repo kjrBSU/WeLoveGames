@@ -9,14 +9,11 @@ package states
 		
 		public function update(s:Skeleton):void
 		{
-			if (s.isBump == true ) 
+			s.move();
+			if (s.isBump == false) 
 			{
-				s.move();
-			}
-			else if (s.isBump == false) {
 				s.setState(Skeleton.WANDER);
 			}
-			frames++
 		}
 		
 		public function enter(s:Skeleton):void

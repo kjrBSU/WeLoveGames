@@ -19,7 +19,7 @@
 		public var ammo:Number;
 		private var collidedObject:DisplayObject;
 		private var collided:Boolean = false;
-		private var bumpBuffer:Number = 25;
+		private var bumpBuffer:Number = 20;
 		
 		public function Player() {
 			
@@ -50,6 +50,7 @@
 			{
 				this.y -= bumpBuffer;
 			}
+			
 			if (this.x > collidedObject.x)
 			{
 				this.x += bumpBuffer;
