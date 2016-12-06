@@ -51,11 +51,13 @@
 		}
 		private function damage():void 
 		{
-			if(damageFrames <= damageBuffer && takeDamage == true){
-				life -= 1;
-			}
-			else if (damageFrames >= damageBuffer){
+			if(damageFrames == damageBuffer && takeDamage == true){
+				life -= 10;
+				trace(life);
 				takeDamage = false;
+			}
+			else if (damageFrames > damageBuffer){
+				//takeDamage = false;
 				damageFrames = 0;
 			}
 		}

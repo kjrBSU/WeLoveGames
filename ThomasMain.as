@@ -332,7 +332,6 @@
 				}
 				if(background.getChildAt(i) is Pirate){
 					player.didHitEnemy(pirateMan);
-					trace(player.life);
 				}
 
 			}
