@@ -166,6 +166,12 @@
 
 				for each(var b: Particle in s.bulletsFired) {
 					s.parent.addChild(b);
+					if(b.hitTestObject(player)){
+						player.life -= 100;
+						s.bulletsFired.removeAt(s.bulletsFired.indexOf(b));
+						s.parent.removeChild(b);
+					}
+					
 					if (b.life < 1) {
 						s.bulletsFired.removeAt(s.bulletsFired.indexOf(b));
 						s.parent.removeChild(b);

@@ -61,6 +61,9 @@
 				damageFrames = 0;
 			}
 		}
+		private function hitByBullet():void {
+			life -= 100;
+		}
 		private function stopPlayer():void {
 			xVel = 0;
 			yVel = 0;
