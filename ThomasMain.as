@@ -344,6 +344,9 @@
 						player.didHitObject(background.getChildAt(i));
 					}
 				}
+				if(background.getChildAt(i) is Pirate){
+					player.didHitEnemy(pirateMan);
+				}
 
 			}
 		}
