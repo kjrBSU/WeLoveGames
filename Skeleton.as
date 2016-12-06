@@ -35,6 +35,7 @@
 		private var _vx:Number;
 		private var _vy:Number;
 		
+		public var health:Number = 100;
 		public var speed:Number;
 		
 		private var _isSkeleBump:Boolean;
@@ -187,6 +188,16 @@
 			var angle = Math.atan2(dy, dx);
 			this.x += Math.cos(angle) * speed;
 			this.y += Math.sin(angle) * speed;
+		}
+		
+		public function kill():void
+		{
+			for each (var bullet:SkeleBullet in bulletsFired)
+			{
+				bulletsFired.removeAt(bulletsFired.indexOf(bullet))
+				this.parent.removeChild(bullet);
+			}
+			this.parent.removeChild(this);
 		}
 		
 	}

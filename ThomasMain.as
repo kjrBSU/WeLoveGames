@@ -128,6 +128,20 @@
 						killBullet(bullet);
 						break;
 					}
+					for each (var skele:Skeleton in skeletons)
+					{
+						if (skele.hitTestPoint(bullet.x, bullet.y)) 
+						{
+							skele.health -= 100
+							if (skele.health < 1)
+							{
+								skeletons.removeAt(skeletons.indexOf(skele))
+								skele.kill();
+								killBullet(bullet);
+							}
+							
+						}
+					}
 				}
 			} 
 
