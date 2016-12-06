@@ -44,13 +44,13 @@
 			
 			if(this.y > collidedObject.y)
 			{
-				this.y += bumpBuffer;
+				this.y += bumpBuffer 
 			}
 			else if(this.y < collidedObject.y)
 			{
 				this.y -= bumpBuffer;
 			}
-			else if(this.x > collidedObject.x)
+			if (this.x > collidedObject.x)
 			{
 				this.x += bumpBuffer;
 			}

@@ -39,6 +39,7 @@
 		
 		private var _isSkeleBump:Boolean;
 		private var _bumperFrames:Number = 0;
+		private var bumperBuffer:Number = 10;     
 		private var _isPlayerNear:Boolean = false;
 		
 		public var chaseRadius:Number = 500;
@@ -69,6 +70,7 @@
 			{
 				_bumperFrames++;
 			}
+			trace(_bumperFrames);
 			
 			/*if (_bumpTimer.running != true)
 			{
@@ -76,7 +78,7 @@
 			}*/
 		}
 		
-		public function setState(newState:IAgentState):void
+		public function setState(newState:IAgentState):void 
 		{
 			if (_currentState == newState) return;
 			if (_currentState)
@@ -161,21 +163,17 @@
 		
 		private function bumperFrames():void
 		{
-			if (_bumperFrames < 10)
+			if (_bumperFrames < bumperBuffer)
 			{
 				this._isSkeleBump = true;
 			}
 			
-			else if (_bumperFrames > 10)
+			else if (_bumperFrames > bumperBuffer)
 			{
-				this._isSkeleBump = false;
+				trace("Hello");
+				this._isSkeleBump = false; 
 				_bumperFrames = 0;
 			}
-		}
-		
-		private function _bumpTimerListener(e:TimerEvent):void
-		{
-			_isSkeleBump = true;
 		}
 		
 		public function distanceToPlayer():Number
