@@ -29,7 +29,7 @@
 			xVel = 0;
 			yVel = 0;
 			speed = 1;
-			life = 100;
+			life = 1000;
 			ammo = 12;
 			
 		}
@@ -52,7 +52,7 @@
 		private function damage():void 
 		{
 			if(damageFrames == damageBuffer && takeDamage == true){
-				life -= 10;
+				life -= 100;
 				trace(life);
 				takeDamage = false;
 			}
@@ -105,7 +105,6 @@
 		
 		public function update():void
 		{
-			
 			x += xVel;
 			y += yVel;
 		}
