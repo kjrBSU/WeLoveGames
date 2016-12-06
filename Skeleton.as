@@ -66,16 +66,12 @@
 			//trace ("Spoopy Skeleton Update!");
 			
 			
-				if (_isSkeleBump == true)
+			if (_isSkeleBump == true)
 			{
 				_bumperFrames++;
+				this.bumperFrames()
 			}
-			trace(_bumperFrames);
 			
-			/*if (_bumpTimer.running != true)
-			{
-				_isSkeleBump = false;
-			}*/
 		}
 		
 		public function setState(newState:IAgentState):void 
@@ -156,8 +152,8 @@
 		{
 			if (this.hitTestObject(dspOb) == true)
 			{
-				//_isSkeleBump = true;
-				this.bumperFrames()
+				_isSkeleBump = true;
+	
 			}
 		}
 		
@@ -170,7 +166,6 @@
 			
 			else if (_bumperFrames > bumperBuffer)
 			{
-				trace("Hello");
 				this._isSkeleBump = false; 
 				_bumperFrames = 0;
 			}
