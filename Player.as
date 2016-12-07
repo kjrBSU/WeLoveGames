@@ -20,9 +20,11 @@
 		private var collidedObject:DisplayObject;
 		private var collided:Boolean = false;
 		private var takeDamage:Boolean = false;
+		public var movingVerticle:Boolean;
 		private var damageFrames:Number = 0;
 		private var damageBuffer:Number = 15;
 		private var bumpBuffer:Number = 20;
+		private var addedAmmo:Number = 5;
 		
 		public function Player() {
 			
@@ -68,20 +70,20 @@
 			xVel = 0;
 			yVel = 0;
 			
-			if(this.y > collidedObject.y)
+			if(this.y > collidedObject.y && movingVerticle == true)
 			{
 				this.y += bumpBuffer 
 			}
-			else if(this.y < collidedObject.y)
+			if(this.y < collidedObject.y && movingVerticle == true)
 			{
 				this.y -= bumpBuffer;
 			}
 			
-			if (this.x > collidedObject.x)
+			if (this.x > collidedObject.x && movingVerticle == false)
 			{
 				this.x += bumpBuffer;
 			}
-			else if(this.x < collidedObject.x)
+			if(this.x < collidedObject.x && movingVerticle == false)
 			{
 				this.x -= bumpBuffer;
 			}
@@ -103,6 +105,17 @@
 			//}/*else if (this.y - playerHalfHeight < 0){
 			//	this.y = 0 + playerHalfHeight;
 			//}*/
+		}
+		
+		public function addAmmo():void {
+			for (var i: uint = 0; i < 1 ; i++) {
+				if (ammo + addedAmmo < 25) {
+				ammo += addedAmmo;
+				}
+				else if (ammo + addedAmmo > 25) {
+					ammo += 25 - ammo;
+				}
+			}			
 		}
 			
 		
