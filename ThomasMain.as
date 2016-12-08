@@ -53,7 +53,9 @@
 		private var piratePoints: Array = new Array();
 		private var pirates: Array = new Array();
 		private var skeletons: Vector.<Skeleton> = new Vector.<Skeleton> ();
+		
 		private var pirateTimer: Timer = new Timer(15000);
+		private var skeletonTimer: Timer = new Timer(10000);
 
 		private var skeleton: Skeleton = new Skeleton();
 		private var skeleton2: Skeleton = new Skeleton();
@@ -108,7 +110,7 @@
 			skeleton2.y = background.height / 2 + 100;
 			background.addChild(skeleton2);
 			skeleton2.target = player;
-
+		
 			ammoPoints.push(topLeft, topRight, bottomLeft, bottomRight);
 			
 			makeammoBoxes();
@@ -124,9 +126,12 @@
 			addEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+			
 			pirateTimer.addEventListener(TimerEvent.TIMER, addAPirate);
+			//skeletonTimer.addEventListener(TimerEvent.TIMER, makeASkeleton);
 
 			pirateTimer.start();
+			//skeletonTimer.start();
 		}
 
 		private function update(evt: Event): void {
@@ -207,8 +212,15 @@
 				}
 			}
 			for each(var s: Skeleton in skeletons) {
-
-				s.update();
+				/*if (s.visible == false )
+				{
+					background.addChild(s);
+				}*/
+				if (s.contains(s) == true && s.visible == true)
+				{
+					s.update();
+				}
+				
 
 
 
@@ -313,6 +325,18 @@
 			} else if (evt.keyCode == 68 || evt.keyCode == 65) {
 				player.xVel = 0;
 			}
+		}
+		
+		private function makeASkeleton():void 
+		{
+				var skeletonTimed:Skeleton = new Skeleton ();
+				var spawnPoint:Point = ammoPoints[0];
+				skeletonTimed.x = spawnPoint.x;
+				skeletonTimed.y = spawnPoint.y;
+				skeletonTimed._target = player;
+				background.addChild(skeletonTimed);
+				skeletons.push(skeletonTimed);
+				trace(skeletons);
 		}
 
 		private function killPirate(pirate: Pirate): void {
