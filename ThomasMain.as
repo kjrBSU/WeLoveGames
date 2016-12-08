@@ -11,21 +11,29 @@
 	import flash.utils.Timer;
 	import flash.utils.getQualifiedClassName;
 	import flash.events.TimerEvent;
+	import flash.text.*;
 
 	import MapBound
 	import Player;
 	import Particle;
 	import Pirate;
 	import Treasure;
+	import flash.text.engine.GraphicElement;
 
 	public class ThomasMain extends MovieClip {
 
 		private var player: Player;
-		private var playerHealthBar:playerHealth = new playerHealth();
+		private var playerHealthBar: playerHealth = new playerHealth();
 		private var background: Map = new Map();
 		private var bullet: Bullet;
 		private var bullets: Array;
 		private var shotAngle: Number;
+
+		private var healthText: TextField;
+		private var health: uint;
+		private var ammoText: TextField;
+		private var ammoAmount: uint;
+		private var ammoIcon:Sprite = new ammoSymbol();
 
 		private var ammoLayer: Sprite = new Sprite();
 		private var topLeft: Point = new Point(365, 402);
@@ -49,8 +57,8 @@
 
 		private var skeleton: Skeleton = new Skeleton();
 		private var skeleton2: Skeleton = new Skeleton();
-		
-		private var viewRect:Rectangle = new Rectangle(stage.stageWidth / 2, stage.height / 2, stage.stageWidth, stage.stageHeight);
+
+		private var viewRect: Rectangle = new Rectangle(stage.stageWidth / 2, stage.height / 2, stage.stageWidth, stage.stageHeight);
 
 		public function ThomasMain() {
 
@@ -59,16 +67,33 @@
 			background.x = 0;
 			background.y = 0;
 			addChild(background);
+
+
+			var myFormat: TextFormat = new TextFormat();
+			myFormat.size = 100;
+
+
+			healthText = new TextField();
+			healthText.defaultTextFormat = myFormat;
+			healthText.width = 500;
+			healthText.height = 400;
+			addChild(healthText);
 			
-			
+			ammoText = new TextField();
+			ammoText.defaultTextFormat = myFormat;
+			ammoText.width = 500;
+			ammoText.height = 400;
+			addChild(ammoText);
+
+
 			player = new Player();
 			player.x = 200;
 			player.y = 200;
-			addChild(player);
+			background.addChild(player);
+
 			
-			playerHealthBar.x = viewRect.x;
-			playerHealthBar.y = viewRect.y;
-			background.addChild(playerHealthBar);
+			addChild(playerHealthBar);
+			addChild(ammoIcon);
 
 			treasure.x = background.width / 2;
 			treasure.y = background.height / 2;
@@ -85,13 +110,8 @@
 			skeleton2.target = player;
 
 			ammoPoints.push(topLeft, topRight, bottomLeft, bottomRight);
-			for (var i = 0; i < 4; i++) {
-				makeammoBox();
-			}
-
-			ammoLayer.addChild(player);
-
-			addChild(ammoLayer);
+			
+			makeammoBoxes();
 
 			skeletons.push(skeleton, skeleton2);
 			/*boneyBullet.x = background.width / 2;
@@ -110,11 +130,25 @@
 		}
 
 		private function update(evt: Event): void {
-			playerHealthBar.x = viewRect.x + 500;
-			playerHealthBar.y = viewRect.y + 200;
 			
+			ammoIcon.x = player.x + 1150;
+			ammoIcon.y = player.y - 800;
+			
+			ammoText.x = player.x + 800;
+			ammoText.y = player.y - 850;
+			ammoAmount = player.ammo;
+			ammoText.text = (ammoAmount.toString() + " / 25");
+			
+			playerHealthBar.x = player.x + 250;
+			playerHealthBar.y = player.y - 900;
+
+			healthText.x = player.x - 150;
+			healthText.y = player.y - 960;
+			health = player.life / 10;
+			healthText.text = (health.toString() + " / 100");
+
 			playerHealthBar.width = player.life;
-			
+
 			if (pirateMan.currentFrame == 1) {
 				movePirateToTreasure(pirateMan);
 			} else if (pirateMan.currentFrame == 2) {
@@ -168,7 +202,7 @@
 
 					if (player.hitTestPoint(ammo.x, ammo.y)) {
 						background.removeChild(ammo);
-						player.ammo += 3;
+						player.addAmmo();
 					}
 				}
 			}
@@ -180,12 +214,12 @@
 
 				for each(var b: Particle in s.bulletsFired) {
 					s.parent.addChild(b);
-					if(b.hitTestObject(player)){
+					if (b.hitTestObject(player)) {
 						player.life -= 100;
 						s.bulletsFired.removeAt(s.bulletsFired.indexOf(b));
 						s.parent.removeChild(b);
 					}
-					
+
 					if (b.life < 1) {
 						s.bulletsFired.removeAt(s.bulletsFired.indexOf(b));
 						s.parent.removeChild(b);
@@ -218,18 +252,23 @@
 
 		}
 
-		private function makeammoBox(): void {
+		private function makeammoBoxes(): void {
 
-			var ammo: Ammo = new Ammo();
+			
 			var i: Number;
-			var point: Point = ammoPoints[i = Math.floor(Math.random() * ammoPoints.length)];
-			ammo.x = point.x;
-			ammo.y = point.y;
+			for (i = 0; i < ammoPoints.length; i++) {
+				var point: Point = ammoPoints[i];
+				var ammo: Ammo = new Ammo();
+				ammo.x = point.x;
+				ammo.y = point.y;
 
-			background.addChild(ammo);
-			ammoArray.push(ammo);
+				background.addChild(ammo);
+				trace("added ammobox");
+				ammoArray.push(ammo);
+			}
+			
 
-			trace("added ammobox");
+			
 
 
 
@@ -254,12 +293,16 @@
 			//87=w 68=d 83=s 65=a
 			if (evt.keyCode == 87) {
 				player.yVel = -20;
+				player.movingVerticle = true;
 			} else if (evt.keyCode == 83) {
 				player.yVel = 20;
+				player.movingVerticle = true;
 			} else if (evt.keyCode == 68) {
 				player.xVel = 20;
+				player.movingVerticle = false;
 			} else if (evt.keyCode == 65) {
 				player.xVel = -20;
+				player.movingVerticle = false;
 			}
 		}
 
@@ -281,7 +324,7 @@
 					treasure.dropped = true;
 					background.removeChild(pirateMan);
 				}
-				
+
 			}
 		}
 
@@ -378,7 +421,7 @@
 
 		private function camera(char: Sprite): void {
 			viewRect.x = char.x - stage.stageWidth / 2;
-			viewRect.y = char.y - stage.stageHeight /2;
+			viewRect.y = char.y - stage.stageHeight / 2;
 			root.scrollRect = viewRect;
 			//new Rectangle(char.x - stage.stageWidth / 2, char.y - stage.height / 2, stage.stageWidth, stage.stageHeight);
 		}

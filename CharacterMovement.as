@@ -66,7 +66,6 @@
 				vx = -5;
 			} else if (event.keyCode == Keyboard.D) {
 				vx = 5;
-				
 			}else if (event.keyCode == Keyboard.W) {
 				vy = -5;
 			}else if (event.keyCode == Keyboard.S) {
