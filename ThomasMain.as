@@ -54,8 +54,7 @@
 		private var pirates: Array = new Array();
 		private var skeletons: Vector.<Skeleton> = new Vector.<Skeleton> ();
 		
-		private var pirateTimer: Timer = new Timer(15000);
-		private var skeletonTimer: Timer = new Timer(10000);
+		private var globalTimer: Timer = new Timer(1000, 30);
 
 		private var skeleton: Skeleton = new Skeleton();
 		private var skeleton2: Skeleton = new Skeleton();
@@ -127,11 +126,11 @@
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 			
-			pirateTimer.addEventListener(TimerEvent.TIMER, addAPirate);
-			//skeletonTimer.addEventListener(TimerEvent.TIMER, makeASkeleton);
+			globalTimer.addEventListener(TimerEvent.TIMER, dankSpawnSystem);
+			globalTimer.addEventListener(TimerEvent.TIMER_COMPLETE, resetTimer);
 
-			pirateTimer.start();
-			//skeletonTimer.start();
+			
+			globalTimer.start();
 		}
 
 		private function update(evt: Event): void {
@@ -241,6 +240,35 @@
 			}
 
 			collision();
+		}
+		
+		private function resetTimer(e:TimerEvent)
+		{
+			globalTimer.reset();
+			globalTimer.start();
+		}
+	
+		private function dankSpawnSystem(event:TimerEvent)
+		{
+			if (event.target.currentCount == 1)
+			{
+				makeammoBoxes();
+			}
+			
+			else if (event.target.currentCount == 10 || event.target.currentCount == 20) 
+			{
+				makeASkeleton();
+			}
+			
+			else if (event.target.currentCount == 15)
+			{
+				addAPirate();
+			}
+			
+			else if (event.target.currentCount == 30)
+			{
+				makeASkeleton();
+			}
 		}
 
 		private function fireBullet(evt: MouseEvent): void {
@@ -352,11 +380,9 @@
 			}
 		}
 
-		private function addAPirate(timer: TimerEvent): void {
+		private function addAPirate(): void {
 			pirateMan = new Pirate();
-			pirateTimer.reset();
 			trace("timer done");
-			pirateTimer.start();
 			var i: Number;
 			var point: Point = piratePoints[i = Math.floor(Math.random() * piratePoints.length)];
 			pirateMan.x = point.x;
