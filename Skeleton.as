@@ -9,12 +9,12 @@
 	import adobe.utils.CustomActions;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
-	import states.BumpState;
-	import states.ChaseState;
-	import states.IAgentState;
-	import states.InitState;
-	import states.ThrowState;
-	import states.WanderState;
+	import SkeletonStates.BumpState;
+	import SkeletonStates.ChaseState;
+	import SkeletonStates.IAgentState;
+	import SkeletonStates.InitState;
+	import SkeletonStates.ThrowState;
+	import SkeletonStates.WanderState;
 	
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
