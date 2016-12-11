@@ -36,8 +36,8 @@
 		private var ammoIcon:Sprite = new ammoSymbol();
 
 		private var ammoLayer: Sprite = new Sprite();
-		private var topLeft: Point = new Point(365, 402);
-		private var topRight: Point = new Point(6085, 422);
+		private var topLeft: Point = new Point(365, 602);
+		private var topRight: Point = new Point(6085, 622);
 		private var bottomLeft: Point = new Point(365, 4062);
 		private var bottomRight: Point = new Point(6085, 4062);
 		private var ammoPoints: Array = new Array();
@@ -55,9 +55,6 @@
 		private var skeletons: Vector.<Skeleton> = new Vector.<Skeleton> ();
 		
 		private var globalTimer: Timer = new Timer(1000, 30);
-
-		private var skeleton: Skeleton = new Skeleton();
-		private var skeleton2: Skeleton = new Skeleton();
 
 		private var viewRect: Rectangle = new Rectangle(stage.stageWidth / 2, stage.height / 2, stage.stageWidth, stage.stageHeight);
 
@@ -88,8 +85,8 @@
 
 
 			player = new Player();
-			player.x = 200;
-			player.y = 200;
+			player.x = background.width / 2;
+			player.y = background.height / 2;
 			background.addChild(player);
 
 			
@@ -99,25 +96,10 @@
 			treasure.x = background.width / 2;
 			treasure.y = background.height / 2;
 			background.addChild(treasure);
-
-			skeleton.x = background.width / 2;
-			skeleton.y = background.height / 2;
-			background.addChild(skeleton);
-			skeleton.target = player;
-
-			skeleton2.x = background.width / 2;
-			skeleton2.y = background.height / 2 + 100;
-			background.addChild(skeleton2);
-			skeleton2.target = player;
 		
 			ammoPoints.push(topLeft, topRight, bottomLeft, bottomRight);
 			
 			makeammoBoxes();
-
-			skeletons.push(skeleton, skeleton2);
-			/*boneyBullet.x = background.width / 2;
-			   boneyBullet.y = background.height / 2 + 100;
-			   addChild(boneyBullet);*/
 
 			piratePoints.push(topPirate, bottomPirate, leftPirate, rightPirate);
 

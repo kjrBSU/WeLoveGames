@@ -43,8 +43,8 @@
 		private var bumperBuffer:Number = 10;     
 		private var _isPlayerNear:Boolean = false;
 		
-		public var chaseRadius:Number = 500;
-		public var throwRadius:Number = 300;
+		public var chaseRadius:Number = 700;
+		public var throwRadius:Number = 500;
 		private var _hitRadius:Number = 1;
 		
 		public var _target:MovieClip;
