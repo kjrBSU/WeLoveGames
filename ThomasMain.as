@@ -56,7 +56,7 @@
 		
 		private var globalTimer: Timer = new Timer(1000, 30);
 
-		private var viewRect: Rectangle = new Rectangle(stage.stageWidth / 2, stage.height / 2, stage.stageWidth, stage.stageHeight);
+		private var viewRect: Rectangle;
 
 		public function ThomasMain() {
 
@@ -65,8 +65,7 @@
 			background.x = 0;
 			background.y = 0;
 			addChild(background);
-
-
+		
 			var myFormat: TextFormat = new TextFormat();
 			myFormat.size = 100;
 
@@ -103,6 +102,14 @@
 
 			piratePoints.push(topPirate, bottomPirate, leftPirate, rightPirate);
 
+			addEventListener(Event.ADDED_TO_STAGE, addToStage);
+			
+			globalTimer.start();
+		}
+		
+		private function addToStage(e:Event)
+		{	
+			removeEventListener(Event.ADDED_TO_STAGE, addToStage);
 			addEventListener(Event.ENTER_FRAME, update);
 			addEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
@@ -110,9 +117,8 @@
 			
 			globalTimer.addEventListener(TimerEvent.TIMER, dankSpawnSystem);
 			globalTimer.addEventListener(TimerEvent.TIMER_COMPLETE, resetTimer);
-
 			
-			globalTimer.start();
+			viewRect = new Rectangle(stage.stageWidth / 2, stage.height / 2, stage.stageWidth, stage.stageHeight);
 		}
 
 		private function update(evt: Event): void {
