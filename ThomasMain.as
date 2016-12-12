@@ -33,7 +33,7 @@
 		private var health: uint;
 		private var ammoText: TextField;
 		private var ammoAmount: uint;
-		private var ammoIcon:Sprite = new ammoSymbol();
+		private var ammoIcon: Sprite = new ammoSymbol();
 
 		private var ammoLayer: Sprite = new Sprite();
 		private var topLeft: Point = new Point(365, 602);
@@ -52,8 +52,9 @@
 		private var leftPirate: Point = new Point(0, background.height / 2);
 		private var piratePoints: Array = new Array();
 		private var pirates: Array = new Array();
-		private var skeletons: Vector.<Skeleton> = new Vector.<Skeleton> ();
-		
+		private var piratePOI: Number;
+		private var skeletons: Vector.<Skeleton> = new Vector.<Skeleton>();
+
 		private var globalTimer: Timer = new Timer(1000, 30);
 
 		private var viewRect: Rectangle;
@@ -75,7 +76,7 @@
 			healthText.width = 500;
 			healthText.height = 400;
 			addChild(healthText);
-			
+
 			ammoText = new TextField();
 			ammoText.defaultTextFormat = myFormat;
 			ammoText.width = 500;
@@ -88,17 +89,16 @@
 			player.y = background.height / 2;
 			background.addChild(player);
 
-			
+
 			addChild(playerHealthBar);
 			addChild(ammoIcon);
 
 			treasure.x = background.width / 2;
 			treasure.y = background.height / 2;
 			background.addChild(treasure);
-		
+
 			ammoPoints.push(topLeft, topRight, bottomLeft, bottomRight);
-			
-			makeammoBoxes();
+			trace(ammoPoints.length);
 
 			piratePoints.push(topPirate, bottomPirate, leftPirate, rightPirate);
 
@@ -114,23 +114,24 @@
 			addEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
-			
+
 			globalTimer.addEventListener(TimerEvent.TIMER, dankSpawnSystem);
 			globalTimer.addEventListener(TimerEvent.TIMER_COMPLETE, resetTimer);
 			
 			viewRect = new Rectangle(stage.stageWidth / 2, stage.height / 2, stage.stageWidth, stage.stageHeight);
+
 		}
 
 		private function update(evt: Event): void {
-			
+
 			ammoIcon.x = player.x + 1150;
 			ammoIcon.y = player.y - 800;
-			
+
 			ammoText.x = player.x + 800;
 			ammoText.y = player.y - 850;
 			ammoAmount = player.ammo;
 			ammoText.text = (ammoAmount.toString() + " / 25");
-			
+
 			playerHealthBar.x = player.x + 250;
 			playerHealthBar.y = player.y - 900;
 
@@ -166,18 +167,15 @@
 						killBullet(bullet);
 						break;
 					}
-					for each (var skele:Skeleton in skeletons)
-					{
-						if (skele.hitTestPoint(bullet.x, bullet.y)) 
-						{
+					for each(var skele: Skeleton in skeletons) {
+						if (skele.hitTestPoint(bullet.x, bullet.y)) {
 							skele.health -= 100
-							if (skele.health < 1)
-							{
+							if (skele.health < 1) {
 								skeletons.removeAt(skeletons.indexOf(skele))
 								skele.kill();
 								killBullet(bullet);
 							}
-							
+
 						}
 					}
 				}
@@ -203,11 +201,10 @@
 				{
 					background.addChild(s);
 				}*/
-				if (s.contains(s) == true && s.visible == true)
-				{
+				if (s.contains(s) == true && s.visible == true) {
 					s.update();
 				}
-				
+
 
 
 
@@ -227,35 +224,26 @@
 				}
 			}
 
+			pirateMan.lookAtIt();
+
 			collision();
 		}
-		
-		private function resetTimer(e:TimerEvent)
-		{
+
+		private function resetTimer(e: TimerEvent) {
 			globalTimer.reset();
 			globalTimer.start();
 		}
-	
-		private function dankSpawnSystem(event:TimerEvent)
-		{
-			if (event.target.currentCount == 1)
-			{
+
+		private function dankSpawnSystem(event: TimerEvent) {
+			if (event.target.currentCount == 1) {
 				makeammoBoxes();
-			}
-			
-			else if (event.target.currentCount == 10 || event.target.currentCount == 20) 
-			{
+			} else if (event.target.currentCount == 10 || event.target.currentCount == 20) {
 				makeASkeleton();
-			}
-			
-			else if (event.target.currentCount == 15)
-			{
+			} else if (event.target.currentCount == 5) {
 				addAPirate();
-			}
-			
-			else if (event.target.currentCount == 30)
-			{
+			} else if (event.target.currentCount == 30) {
 				makeASkeleton();
+				removeAmmo();
 			}
 		}
 
@@ -282,7 +270,6 @@
 
 		private function makeammoBoxes(): void {
 
-			
 			var i: Number;
 			for (i = 0; i < ammoPoints.length; i++) {
 				var point: Point = ammoPoints[i];
@@ -294,13 +281,23 @@
 				trace("added ammobox");
 				ammoArray.push(ammo);
 			}
-			
-
-			
 
 
 
 		}
+
+		private function removeAmmo(): void {
+			for each(var ammo:Ammo in ammoArray){
+				if (contains(ammo)) {
+				for (var j: int = 0; j < ammoArray.length; j++) {
+						if(ammoArray[j].name == ammo.name){
+							background.removeChild(ammoArray[j]);
+						}
+					}
+				}
+			}
+		}
+
 
 		private function killBullet(bullet: Particle): void {
 			try {
@@ -342,17 +339,18 @@
 				player.xVel = 0;
 			}
 		}
-		
-		private function makeASkeleton():void 
-		{
-				var skeletonTimed:Skeleton = new Skeleton ();
-				var spawnPoint:Point = ammoPoints[0];
+
+		private function makeASkeleton(): void {
+			for (var i: uint = 0; i < 1; i++) {
+				var skeletonTimed: Skeleton = new Skeleton();
+				var spawnPoint: Point = ammoPoints[i = Math.floor(Math.random() * ammoPoints.length)];
 				skeletonTimed.x = spawnPoint.x;
 				skeletonTimed.y = spawnPoint.y;
 				skeletonTimed._target = player;
 				background.addChild(skeletonTimed);
 				skeletons.push(skeletonTimed);
-				trace(skeletons);
+			}
+			trace(skeletons);
 		}
 
 		private function killPirate(pirate: Pirate): void {
@@ -379,6 +377,7 @@
 			background.addChild(pirateMan);
 			pirates.push(pirateMan);
 			pirateMan.gotoAndStop(1);
+			pirateMan.pointOfInterest = pirateMan.lookAtAnObject(treasure.x, treasure.y);
 		}
 
 		private function setPiratePad(): void {
@@ -389,6 +388,7 @@
 
 			piratePad.x = point.x;
 			piratePad.y = point.y;
+			pirateMan.pointOfInterest = pirateMan.lookAtAnObject(point.x, point.y);
 
 		}
 
