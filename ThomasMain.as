@@ -58,6 +58,8 @@
 		private var globalTimer: Timer = new Timer(1000, 30);
 
 		private var viewRect: Rectangle;
+		
+		private var resetBtn:resetButton;
 
 		public function ThomasMain() {
 
@@ -120,6 +122,17 @@
 			
 			viewRect = new Rectangle(stage.stageWidth / 2, stage.height / 2, stage.stageWidth, stage.stageHeight);
 
+		}
+		
+		private function removeFromStage():void
+		{
+			removeEventListener(Event.ENTER_FRAME, update);
+			removeEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
+			stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+			stage.removeEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+
+			globalTimer.removeEventListener(TimerEvent.TIMER, dankSpawnSystem);
+			globalTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, resetTimer);
 		}
 
 		private function update(evt: Event): void {
@@ -227,6 +240,9 @@
 			pirateMan.lookAtIt();
 
 			collision();
+			
+			endGame()
+			
 		}
 
 		private function resetTimer(e: TimerEvent) {
@@ -462,6 +478,28 @@
 			viewRect.y = char.y - stage.stageHeight / 2;
 			root.scrollRect = viewRect;
 			//new Rectangle(char.x - stage.stageWidth / 2, char.y - stage.height / 2, stage.stageWidth, stage.stageHeight);
+		}
+		
+		private function endGame()
+		{
+			if (player.life < 1)
+			{
+				removeFromStage();
+				resetBtn = new resetButton();
+				addChild(resetBtn);
+				resetBtn.x = viewRect.x + viewRect.width / 2 - resetBtn.width / 2;
+				resetBtn.y = viewRect.y + viewRect.height / 2 - resetBtn.height / 2;
+				resetBtn.addEventListener(MouseEvent.CLICK, resetGame);	
+			}
+		}
+		
+		private function resetGame(e:Event):void 
+		{
+			trace("reset game");
+			removeChild(background);
+			resetBtn.removeEventListener(MouseEvent.CLICK, resetGame);
+			var game:ThomasMain = new ThomasMain();
+			addChild(game);
 		}
 
 	}
