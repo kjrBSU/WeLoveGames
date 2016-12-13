@@ -53,6 +53,7 @@
 		private var piratePoints: Array = new Array();
 		private var pirates: Array = new Array();
 		private var piratePOI: Number;
+		private var pirateEscaped:Boolean = false;
 		private var skeletons: Vector.<Skeleton> = new Vector.<Skeleton>();
 
 		private var globalTimer: Timer = new Timer(1000, 30);
@@ -471,6 +472,9 @@
 
 
 			}
+			if(pirateMan.hitTestPoint(piratePad.x, piratePad.y)){
+				pirateEscaped = true;
+			}
 		}
 
 		private function camera(char: Sprite): void {
@@ -484,6 +488,14 @@
 		{
 			if (player.life < 1)
 			{
+				removeFromStage();
+				resetBtn = new resetButton();
+				addChild(resetBtn);
+				resetBtn.x = viewRect.x + viewRect.width / 2 - resetBtn.width / 2;
+				resetBtn.y = viewRect.y + viewRect.height / 2 - resetBtn.height / 2;
+				resetBtn.addEventListener(MouseEvent.CLICK, resetGame);	
+			}
+			if(pirateEscaped == true){
 				removeFromStage();
 				resetBtn = new resetButton();
 				addChild(resetBtn);
