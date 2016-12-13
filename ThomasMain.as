@@ -467,15 +467,34 @@
 		public function collision(): void {
 			for (var i: int = 0; i < background.numChildren; i++) {
 				if (background.getChildAt(i) is MapBound) {
-					for each(var skele: Skeleton in skeletons) {
+					for each(var skele: Skeleton in skeletons) 
+					{
 						skele.didHitObject(background.getChildAt(i));
+						for each(var sb:SkeleBullet in skele.bulletsFired)
+						{
+							if (sb.hitTestObject(getChildAt(i)))
+							{
+								background.removeChild(sb)
+								skele.bulletsFired.removeAt(skele.bulletsFired.indexOf(sb));
+							}
+						}
 					}
 
 					if (player.hitTestObject(background.getChildAt(i))) {
 						player.didHitObject(background.getChildAt(i));
 					}
-					if(pirateMan.hitTestObject(background.getChildAt(i)) && pirateHasTreasure){
+
+					if(pirateMan.hitTestObject(background.getChildAt(i)) && pirateHasTreasure == true){
 						pirateEscaped = true;
+
+					}
+					for each (var b:Particle in bullets)
+					{
+						if (b.hitTestObject(background.getChildAt(i)))
+						{
+							killBullet(b);
+						}
+
 					}
 				}
 				if (background.getChildAt(i) is Pirate) {
