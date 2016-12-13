@@ -484,6 +484,7 @@
 		{
 			if (player.life < 1)
 			{
+				
 				removeFromStage();
 				resetBtn = new resetButton();
 				addChild(resetBtn);
@@ -496,8 +497,13 @@
 		private function resetGame(e:Event):void 
 		{
 			trace("reset game");
-			removeChild(background);
+			//removeChild(background);
 			resetBtn.removeEventListener(MouseEvent.CLICK, resetGame);
+			while (numChildren > 0)
+			{
+				removeChildAt(0);
+			}
+			//removeChild(resetBtn);
 			var game:ThomasMain = new ThomasMain();
 			addChild(game);
 		}
