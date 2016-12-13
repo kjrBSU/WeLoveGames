@@ -48,12 +48,13 @@
 		private var piratePad: Point = new Point();
 		private var topPirate: Point = new Point(background.width / 2, 0);
 		private var bottomPirate: Point = new Point(background.width / 2, background.height);
-		private var rightPirate: Point = new Point(background.width, background.height / 2);
-		private var leftPirate: Point = new Point(0, background.height / 2);
+		private var rightPirate: Point = new Point(background.width, (background.height / 2 + 200));
+		private var leftPirate: Point = new Point(0, (background.height / 2 + 200));
 		private var piratePoints: Array = new Array();
 		private var pirates: Array = new Array();
 		private var piratePOI: Number;
 		private var pirateEscaped:Boolean = false;
+		private var pirateHasTreasure:Boolean = false;
 		private var skeletons: Vector.<Skeleton> = new Vector.<Skeleton>();
 
 		private var globalTimer: Timer = new Timer(1000, 30);
@@ -96,8 +97,8 @@
 			addChild(playerHealthBar);
 			addChild(ammoIcon);
 
-			treasure.x = background.width / 2;
-			treasure.y = background.height / 2;
+			treasure.x = 3216;
+			treasure.y = 2400;
 			background.addChild(treasure);
 
 			ammoPoints.push(topLeft, topRight, bottomLeft, bottomRight);
@@ -117,6 +118,7 @@
 			addEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+			//stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseCoords);
 
 			globalTimer.addEventListener(TimerEvent.TIMER, dankSpawnSystem);
 			globalTimer.addEventListener(TimerEvent.TIMER_COMPLETE, resetTimer);
@@ -124,6 +126,10 @@
 			viewRect = new Rectangle(stage.stageWidth / 2, stage.height / 2, stage.stageWidth, stage.stageHeight);
 
 		}
+		/*private function mouseCoords(e:MouseEvent):void {
+			trace(mouseX, mouseY);
+			trace(treasure.x, treasure.y);
+		}*/
 		
 		private function removeFromStage():void
 		{
@@ -137,7 +143,7 @@
 		}
 
 		private function update(evt: Event): void {
-
+		
 			ammoIcon.x = player.x + 1150;
 			ammoIcon.y = player.y - 800;
 
@@ -161,7 +167,13 @@
 			} else if (pirateMan.currentFrame == 2) {
 				movePirateToPad(pirateMan);
 			}
+			if(contains(pirateMan)){
 			didPirateHitTreasure(pirateMan);
+			}
+			
+			if (pirateMan.life < 1) {
+					killPirate(pirateMan);
+			}
 
 			camera(player);
 			player.update();
@@ -195,9 +207,7 @@
 				}
 			}
 
-			if (pirateMan.life == 0) {
-				killPirate(pirateMan);
-			}
+			
 
 			for each(var ammo: Ammo in ammoArray) {
 
@@ -372,11 +382,14 @@
 
 		private function killPirate(pirate: Pirate): void {
 			if (contains(pirateMan)) {
+				if(pirateMan.currentFrame == 1) {
+					background.removeChild(pirateMan);
+				}
 				if (pirateMan.currentFrame == 2) {
-					treasure.x = background.width / 2;
-					treasure.y = background.height / 2;
+					treasure.x = 3216;
+					treasure.y = 2400;
 					background.addChild(treasure);
-					treasure.dropped = true;
+					pirateHasTreasure = false;
 					background.removeChild(pirateMan);
 				}
 
@@ -446,6 +459,7 @@
 					background.removeChild(treasure);
 					pirate.gotoAndStop(2);
 					setPiratePad();
+					pirateHasTreasure = true;
 				}
 			}
 		}
@@ -460,6 +474,9 @@
 					if (player.hitTestObject(background.getChildAt(i))) {
 						player.didHitObject(background.getChildAt(i));
 					}
+					if(pirateMan.hitTestObject(background.getChildAt(i)) && pirateHasTreasure){
+						pirateEscaped = true;
+					}
 				}
 				if (background.getChildAt(i) is Pirate) {
 					player.didHitEnemy(pirateMan);
@@ -472,9 +489,9 @@
 
 
 			}
-			if(pirateMan.hitTestPoint(piratePad.x, piratePad.y)){
+			/*if(pirateMan.hitTestPoint(piratePad.x, piratePad.y)){
 				pirateEscaped = true;
-			}
+			}*/
 		}
 
 		private function camera(char: Sprite): void {
@@ -496,7 +513,7 @@
 				resetBtn.y = viewRect.y + viewRect.height / 2 - resetBtn.height / 2;
 				resetBtn.addEventListener(MouseEvent.CLICK, resetGame);	
 			}
-			if(pirateEscaped == true){
+			if(pirateEscaped == true && pirateHasTreasure == true){
 				removeFromStage();
 				resetBtn = new resetButton();
 				addChild(resetBtn);
