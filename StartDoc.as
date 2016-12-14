@@ -2,7 +2,9 @@
 {
 	import flash.display.StageScaleMode;
 	import flash.events.MouseEvent;
-	
+	import flash.media.Sound;
+    import flash.media.SoundChannel; 
+	import flash.net.*;
 	import flash.display.SimpleButton;
 	import flash.display.MovieClip;
 	
@@ -11,13 +13,16 @@
 	public class StartDoc extends MovieClip
 	{
 		
-/*		private var startSound:Sound = new Sound();
-		private var mySoundChannel:SoundChannel = new SoundChannel();*/
+		private var startSound:Sound;
+		private var mySoundChannel:SoundChannel = new SoundChannel();
+		private var menuChannel:SoundChannel;
 		public function StartDoc()
 		{
 			//stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			createStartMenu();
+			startSound = new Sound(new URLRequest("mainMenu.mp3"));
+			menuChannel = startSound.play(25000, 1);
 		}
 		
 		private function createStartMenu():void
@@ -40,6 +45,8 @@
 		
 		private function createGame():void
 		{
+			menuChannel.stop();
+			menuChannel = null;
 			var game:ThomasMain = new ThomasMain();
 			
 			addChild(game);
