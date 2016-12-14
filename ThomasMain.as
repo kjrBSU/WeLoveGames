@@ -34,6 +34,8 @@
 		private var health: uint;
 		private var ammoText: TextField;
 		private var ammoAmount: uint;
+		private var scoreText: TextField;
+		private var score: uint = 0;
 		private var ammoIcon: Sprite = new ammoSymbol();
 
 		private var ammoLayer: Sprite = new Sprite();
@@ -82,6 +84,12 @@
 			healthText.width = 500;
 			healthText.height = 400;
 			addChild(healthText);
+			
+			scoreText = new TextField();
+			scoreText.defaultTextFormat = myFormat;
+			healthText.width = 500;
+			scoreText.width = 400;
+			addChild(scoreText);
 
 			ammoText = new TextField();
 			ammoText.defaultTextFormat = myFormat;
@@ -176,6 +184,10 @@
 			ammoText.y = player.y - 850;
 			ammoAmount = player.ammo;
 			ammoText.text = (ammoAmount.toString() + " / 25");
+			
+			scoreText.x = player.x + 850;
+			scoreText.y = player.y -750;
+			scoreText.text = ("score: " + score.toString());
 
 			playerHealthBar.x = player.x + 250;
 			playerHealthBar.y = player.y - 900;
@@ -289,6 +301,7 @@
 		private function dankSpawnSystem(event: TimerEvent) {
 			if (event.target.currentCount == 1) {
 				makeammoBoxes();
+				
 			} else if (event.target.currentCount == 10 || event.target.currentCount == 20) {
 				makeASkeleton();
 			} else if (event.target.currentCount == 5) {
@@ -296,7 +309,11 @@
 			} else if (event.target.currentCount == 30) {
 				makeASkeleton();
 				removeAmmo();
+				addScore();
 			}
+		}
+		private function addScore():void {
+			score += 10;
 		}
 
 		private function fireBullet(evt: MouseEvent): void {
