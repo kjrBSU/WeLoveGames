@@ -59,7 +59,7 @@
 		private var piratePOI: Number;
 		private var pirateEscaped:Boolean = false;
 		private var pirateHasTreasure:Boolean = false;
-		private var skeletons: Vector.<Skeleton> = new Vector.<Skeleton>();
+		private var skeletons: Array = new Array();
 
 		private var globalTimer: Timer = new Timer(1000, 30);
 

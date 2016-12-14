@@ -49,7 +49,7 @@
 		
 		public var _target:MovieClip;
 		
-		public var bulletsFired:Vector.<Particle> = new Vector.<Particle>();
+		public var bulletsFired:Array = new Array;
 		
 		public function Skeleton()
 		{
