@@ -1,4 +1,4 @@
-package 
+﻿package 
 {
 	import flash.display.StageScaleMode;
 	import flash.events.MouseEvent;
@@ -10,6 +10,9 @@ package
 	
 	public class StartDoc extends MovieClip
 	{
+		
+		private var startSound:Sound = new Sound();
+		private var mySoundChannel:SoundChannel = new SoundChannel();
 		public function StartDoc()
 		{
 			//stage.scaleMode = StageScaleMode.NO_SCALE;

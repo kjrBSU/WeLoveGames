@@ -12,6 +12,9 @@
 	import flash.utils.getQualifiedClassName;
 	import flash.events.TimerEvent;
 	import flash.text.*;
+	import flash.media.Sound;
+    import flash.media.SoundChannel; 
+	import flash.net.*;
 
 	import MapBound
 	import Player;
@@ -64,8 +67,14 @@
 		private var viewRect: Rectangle;
 		
 		private var resetBtn:resetButton;
+		
+		private var snd:Sound;
+		private var soundStart:int = 2000;
+		private var channel:SoundChannel;
 
 		public function ThomasMain() {
+			snd = new Sound(new URLRequest("inGame.mp3"));
+			channel = snd.play(2000, 1);
 
 			bullets = new Array();
 
@@ -539,7 +548,7 @@
 		
 		private function endGame()
 		{
-			if (player.life < 1)
+			if (player.life < 1 && pirateEscaped == true)
 			{
 				
 				removeFromStage();
@@ -548,17 +557,22 @@
 				resetBtn.x = viewRect.x + viewRect.width / 2 - resetBtn.width / 2;
 				resetBtn.y = viewRect.y + viewRect.height / 2 - resetBtn.height / 2;
 				resetBtn.addEventListener(MouseEvent.CLICK, resetGame);	
+				channel.stop();
 			}
-			if(pirateEscaped == true && pirateHasTreasure == true){
+			if (pirateHasTreasure == true && pirateEscaped == true)
+			{
+				
 				removeFromStage();
 				resetBtn = new resetButton();
 				addChild(resetBtn);
 				resetBtn.x = viewRect.x + viewRect.width / 2 - resetBtn.width / 2;
 				resetBtn.y = viewRect.y + viewRect.height / 2 - resetBtn.height / 2;
 				resetBtn.addEventListener(MouseEvent.CLICK, resetGame);	
+				channel.stop();
+				snd.close();
 			}
+			
 		}
-		
 		private function resetGame(e:Event):void 
 		{
 			trace("reset game");
@@ -571,6 +585,7 @@
 			//removeChild(resetBtn);
 			var game:ThomasMain = new ThomasMain();
 			addChild(game);
+			channel = snd.play(soundStart);
 		}
 
 	}
