@@ -624,7 +624,6 @@
 			//removeChild(resetBtn);
 			var game:ThomasMain = new ThomasMain();
 			addChild(game);
-			channel = snd.play(soundStart);
 		}
 
 	}
