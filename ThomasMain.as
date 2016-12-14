@@ -16,7 +16,8 @@
     import flash.media.SoundChannel; 
 	import flash.net.*;
 
-	import MapBound
+	import MapBound;
+	import ammoSpawn;
 	import Player;
 	import Particle;
 	import Pirate;
@@ -56,6 +57,7 @@
 		private var rightPirate: Point = new Point(background.width, (background.height / 2 + 200));
 		private var leftPirate: Point = new Point(0, (background.height / 2 + 200));
 		private var piratePoints: Array = new Array();
+		private var skeletonPoints:Array = new Array();
 		private var pirates: Array = new Array();
 		private var piratePOI: Number;
 		private var pirateEscaped:Boolean = false;
@@ -117,8 +119,9 @@
 			treasure.x = 3216;
 			treasure.y = 2400;
 			background.addChild(treasure);
-
-			ammoPoints.push(topLeft, topRight, bottomLeft, bottomRight);
+			
+			pushAmmoPoints();
+			pushSkeletonPoints();
 			trace(ammoPoints.length);
 
 			piratePoints.push(topPirate, bottomPirate, leftPirate, rightPirate);
@@ -157,6 +160,28 @@
 
 			globalTimer.removeEventListener(TimerEvent.TIMER, dankSpawnSystem);
 			globalTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, resetTimer);
+		}
+		
+		private function pushAmmoPoints():void
+		{
+			for ( var i:int = 0; i < background.numChildren; i++)
+			{
+				if (background.getChildAt(i) is ammoSpawn)
+				{
+					ammoPoints.push(background.getChildAt(i));
+				}
+			}
+		}
+		
+		private function pushSkeletonPoints():void
+		{
+			for ( var i:int = 0; i < background.numChildren; i++)
+			{
+				if (background.getChildAt(i) is skeletonSpawn)
+				{
+					skeletonPoints.push(background.getChildAt(i));
+				}
+			}
 		}
 
 		private function update(evt: Event): void {
@@ -323,9 +348,23 @@
 
 		private function makeammoBoxes(): void {
 
-			var i: Number;
+		for each(var ammoPack:ammoSpawn in ammoPoints)
+		{
+			var ammo: Ammo = new Ammo()
+			ammo.x = ammoPack.x;
+			ammo.y = ammoPack.y;
+			ammoArray.push(ammo);
+			background.addChild(ammo);
+		}
+			
+			
+			
+			
+			
+			
+			/*var i: Number;
 			for (i = 0; i < ammoPoints.length; i++) {
-				var point: Point = ammoPoints[i];
+				var point: ammoSpawn = ammoPoints[i];
 				var ammo: Ammo = new Ammo();
 				ammo.x = point.x;
 				ammo.y = point.y;
@@ -333,7 +372,7 @@
 				background.addChild(ammo);
 				trace("added ammobox");
 				ammoArray.push(ammo);
-			}
+			}*/
 
 
 
@@ -396,7 +435,7 @@
 		private function makeASkeleton(): void {
 			for (var i: uint = 0; i < 1; i++) {
 				var skeletonTimed: Skeleton = new Skeleton();
-				var spawnPoint: Point = ammoPoints[i = Math.floor(Math.random() * ammoPoints.length)];
+				var spawnPoint: skeletonSpawn = skeletonPoints[i = Math.floor(Math.random() * ammoPoints.length)];
 				skeletonTimed.x = spawnPoint.x;
 				skeletonTimed.y = spawnPoint.y;
 				skeletonTimed._target = player;
