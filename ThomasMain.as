@@ -469,15 +469,15 @@
 				if (background.getChildAt(i) is MapBound) {
 					for each(var skele: Skeleton in skeletons) 
 					{
-						skele.didHitObject(background.getChildAt(i));
 						for each(var sb:SkeleBullet in skele.bulletsFired)
 						{
-							if (sb.hitTestObject(getChildAt(i)))
+							if (sb.hitTestObject(background.getChildAt(i)))
 							{
 								background.removeChild(sb)
 								skele.bulletsFired.removeAt(skele.bulletsFired.indexOf(sb));
 							}
 						}
+						skele.didHitObject(background.getChildAt(i));
 					}
 
 					if (player.hitTestObject(background.getChildAt(i))) {

@@ -10,17 +10,21 @@ package SkeletonStates
 		public function update(s:Skeleton):void
 		{
 			s.move();
-			if (s.isBump == false) 
+			if (frames > maxFrames)
 			{
-				s.setState(Skeleton.WANDER);
+				if (s.isBump == false)
+				{
+					s.setState(Skeleton.WANDER);
+				}
 			}
+			frames++
 		}
 		
 		public function enter(s:Skeleton):void
 		{
 			s.vx = -s.vx;
 			s.vy = -s.vy;
-			trace ("Bump!")
+			trace("Bump!")
 		}
 		
 		public function exit(s:Skeleton):void
