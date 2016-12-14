@@ -67,23 +67,23 @@
 			life -= 100;
 		}
 		private function stopPlayer():void {
-			xVel = 0;
-			yVel = 0;
+			//xVel = 0;
+			//yVel = 0;
 			
-			if(this.y > collidedObject.y && movingVerticle == true)
+			if(this.y > collidedObject.y && this.yVel == -20)
 			{
-				this.y += bumpBuffer 
+				this.y += bumpBuffer; 
 			}
-			if(this.y < collidedObject.y && movingVerticle == true)
+			if(this.y < collidedObject.y && this.yVel == 20)
 			{
 				this.y -= bumpBuffer;
 			}
 			
-			if (this.x > collidedObject.x && movingVerticle == false)
+			if (this.x > collidedObject.x && this.xVel == -20)
 			{
 				this.x += bumpBuffer;
 			}
-			if(this.x < collidedObject.x && movingVerticle == false)
+			if(this.x < collidedObject.x && this.xVel == 20)
 			{
 				this.x -= bumpBuffer;
 			}
