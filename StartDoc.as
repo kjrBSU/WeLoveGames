@@ -21,7 +21,7 @@
 			//stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			createStartMenu();
-			startSound = new Sound(new URLRequest("mainMenu.mp3"));
+			startSound = new Sound(new URLRequest("gameSounds/mainMenu.mp3"));
 			menuChannel = startSound.play(25000, 1);
 		}
 		

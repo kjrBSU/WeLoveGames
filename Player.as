@@ -35,7 +35,7 @@
 		
 		public function Player() {
 			
-			playerGotHit = new Sound(new URLRequest("playerBeingHit.mp3"));
+			playerGotHit = new Sound(new URLRequest("gameSounds/playerBeingHit.mp3"));
 			xVel = 0;
 			yVel = 0;
 			movingSpeed = 30;

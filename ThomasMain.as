@@ -85,15 +85,15 @@
 
 		public function ThomasMain() {
 			
-			snd = new Sound(new URLRequest("inGame.mp3"));
+			snd = new Sound(new URLRequest("gameSounds/inGame.mp3"));
 			themeChannel = snd.play(2000, 1);
-			skeletonSound = new Sound(new URLRequest("skeleSound.mp3"));
-			pirateDying = new Sound(new URLRequest("pirateDying.mp3"));
-			pirateSpawned = new Sound(new URLRequest("PirateSpawn.mp3"));
-			pirateGrabbedTreasure = new Sound(new URLRequest("PickedUpTreasure.mp3"));
-			playerGotHit = new Sound(new URLRequest("playerBeingHit.mp3"));
-			endMusic = new Sound(new URLRequest("endGameTheme.mp3"));
-			ammoPickUp = new Sound(new URLRequest("ammoPickUp.mp3"));
+			skeletonSound = new Sound(new URLRequest("gameSounds/skeleSound.mp3"));
+			pirateDying = new Sound(new URLRequest("gameSounds/pirateDying.mp3"));
+			pirateSpawned = new Sound(new URLRequest("gameSounds/PirateSpawn.mp3"));
+			pirateGrabbedTreasure = new Sound(new URLRequest("gameSounds/PickedUpTreasure.mp3"));
+			playerGotHit = new Sound(new URLRequest("gameSounds/playerBeingHit.mp3"));
+			endMusic = new Sound(new URLRequest("gameSounds/endGameTheme.mp3"));
+			ammoPickUp = new Sound(new URLRequest("gameSounds/ammoPickUp.mp3"));
 
 			bullets = new Array();
 
