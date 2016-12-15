@@ -12,6 +12,9 @@
 	import flash.utils.getQualifiedClassName;
 	import flash.events.TimerEvent;
 	import flash.text.*;
+	import flash.media.Sound;
+    import flash.media.SoundChannel; 
+	import flash.net.*;
 
 	import MapBound;
 	import ammoSpawn;
@@ -66,8 +69,29 @@
 		private var viewRect: Rectangle;
 		
 		private var resetBtn:resetButton;
+		
+		private var snd:Sound;
+		private var soundStart:int = 2000;
+		private var soundEffectChannel:SoundChannel;
+		private var themeChannel:SoundChannel;
+		private var endChannel:SoundChannel;
+		private var skeletonSound:Sound;
+		private var pirateDying:Sound;
+		private var pirateSpawned:Sound;
+		private var pirateGrabbedTreasure:Sound;
+		private var playerGotHit:Sound;
+		private var endMusic:Sound;
 
 		public function ThomasMain() {
+			
+			snd = new Sound(new URLRequest("inGame.mp3"));
+			themeChannel = snd.play(2000, 1);
+			skeletonSound = new Sound(new URLRequest("skeleSound.mp3"));
+			pirateDying = new Sound(new URLRequest("pirateDying.mp3"));
+			pirateSpawned = new Sound(new URLRequest("PirateSpawn.mp3"));
+			pirateGrabbedTreasure = new Sound(new URLRequest("PickedUpTreasure.mp3"));
+			playerGotHit = new Sound(new URLRequest("playerBeingHit.mp3"));
+			endMusic = new Sound(new URLRequest("endGameTheme.mp3"));
 
 			bullets = new Array();
 
@@ -127,6 +151,7 @@
 			removeEventListener(Event.ADDED_TO_STAGE, addToStage);
 			addEventListener(Event.ENTER_FRAME, update);
 			addEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
+			themeChannel.addEventListener(Event.SOUND_COMPLETE, loopSound);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 			//stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseCoords);
@@ -136,6 +161,9 @@
 			
 			viewRect = new Rectangle(stage.stageWidth / 2, stage.height / 2, stage.stageWidth, stage.stageHeight);
 
+		}
+		private function loopSound(e:Event):void {
+			themeChannel = snd.play();
 		}
 		/*private function mouseCoords(e:MouseEvent):void {
 			trace(mouseX, mouseY);
@@ -148,6 +176,8 @@
 			removeEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			stage.removeEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+			removeEventListener(Event.SOUND_COMPLETE, loopSound);
+			
 
 			globalTimer.removeEventListener(TimerEvent.TIMER, dankSpawnSystem);
 			globalTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, resetTimer);
@@ -237,6 +267,7 @@
 								skeletons.removeAt(skeletons.indexOf(skele))
 								skele.kill();
 								killBullet(bullet);
+								soundEffectChannel = skeletonSound.play(500, 1);
 							}
 
 						}
@@ -254,6 +285,7 @@
 					if (player.hitTestPoint(ammo.x, ammo.y)) {
 						background.removeChild(ammo);
 						player.addAmmo();
+						soundEffectChannel = playerGotHit.play();
 					}
 				}
 			}
@@ -275,6 +307,7 @@
 						player.life -= 100;
 						s.bulletsFired.removeAt(s.bulletsFired.indexOf(b));
 						s.parent.removeChild(b);
+						soundEffectChannel = playerGotHit.play();
 					}
 
 					if (b.life < 1) {
@@ -441,6 +474,8 @@
 			if (contains(pirateMan)) {
 				if(pirateMan.currentFrame == 1) {
 					background.removeChild(pirateMan);
+					soundEffectChannel = pirateDying.play();
+					
 				}
 				if (pirateMan.currentFrame == 2) {
 					treasure.x = 3216;
@@ -448,6 +483,7 @@
 					background.addChild(treasure);
 					pirateHasTreasure = false;
 					background.removeChild(pirateMan);
+					soundEffectChannel = pirateDying.play();
 				}
 
 			}
@@ -465,6 +501,7 @@
 			pirates.push(pirateMan);
 			pirateMan.gotoAndStop(1);
 			pirateMan.pointOfInterest = pirateMan.lookAtAnObject(treasure.x, treasure.y);
+			soundEffectChannel = pirateSpawned.play();
 		}
 
 		private function setPiratePad(): void {
@@ -517,6 +554,7 @@
 					pirate.gotoAndStop(2);
 					setPiratePad();
 					pirateHasTreasure = true;
+					soundEffectChannel = pirateGrabbedTreasure.play();
 				}
 			}
 		}
@@ -569,7 +607,7 @@
 				pirateEscaped = true;
 			}*/
 		}
-
+		
 		private function camera(char: Sprite): void {
 			viewRect.x = char.x - stage.stageWidth / 2;
 			viewRect.y = char.y - stage.stageHeight / 2;
@@ -579,7 +617,7 @@
 		
 		private function endGame()
 		{
-			if (player.life < 1)
+			if (player.life < 1 || pirateEscaped == true)
 			{
 				
 				removeFromStage();
@@ -588,17 +626,26 @@
 				resetBtn.x = viewRect.x + viewRect.width / 2 - resetBtn.width / 2;
 				resetBtn.y = viewRect.y + viewRect.height / 2 - resetBtn.height / 2;
 				resetBtn.addEventListener(MouseEvent.CLICK, resetGame);	
+
+				themeChannel.stop();
+				endChannel = endMusic.play(5000, 1);
+				//snd.close();
+				
 			}
-			if(pirateEscaped == true && pirateHasTreasure == true){
+			/*if (pirateHasTreasure == true && pirateEscaped == true)
+			{
+				
 				removeFromStage();
 				resetBtn = new resetButton();
 				addChild(resetBtn);
 				resetBtn.x = viewRect.x + viewRect.width / 2 - resetBtn.width / 2;
 				resetBtn.y = viewRect.y + viewRect.height / 2 - resetBtn.height / 2;
 				resetBtn.addEventListener(MouseEvent.CLICK, resetGame);	
-			}
+				channel.stop();
+				snd.close();
+			}*/
+			
 		}
-		
 		private function resetGame(e:Event):void 
 		{
 			trace("reset game");
@@ -610,7 +657,9 @@
 			}
 			//removeChild(resetBtn);
 			var game:ThomasMain = new ThomasMain();
+			endChannel.stop();
 			addChild(game);
+			
 		}
 
 	}

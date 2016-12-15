@@ -9,6 +9,9 @@
 	import flash.ui.Keyboard;	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.media.Sound;
+    import flash.media.SoundChannel; 
+	import flash.net.*;
 	
 	public class Player extends MovieClip {
 		
@@ -26,9 +29,13 @@
 		private var damageBuffer:Number = 15;
 		private var bumpBuffer:Number = 20;
 		private var addedAmmo:Number = 5;
+		private var playerGotHit:Sound;
+		
+		private var channel:SoundChannel;
 		
 		public function Player() {
 			
+			playerGotHit = new Sound(new URLRequest("playerBeingHit.mp3"));
 			xVel = 0;
 			yVel = 0;
 			movingSpeed = 30;
@@ -51,6 +58,7 @@
 				damage();
 				takeDamage = true;
 				damageFrames++;
+				
 			}
 		}
 		private function damage():void 
@@ -59,10 +67,17 @@
 				life -= 100;
 				trace(life);
 				takeDamage = false;
+				makeSound();
 			}
 			else if (damageFrames > damageBuffer){
 				//takeDamage = false;
 				damageFrames = 0;
+			}
+			
+		}
+		private function makeSound():void {
+			for(var i:int = 0; i < 1; i++){
+			channel = playerGotHit.play();
 			}
 		}
 		private function hitByBullet():void {
