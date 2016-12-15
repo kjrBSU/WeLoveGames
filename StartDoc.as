@@ -31,7 +31,7 @@
 			
 			addChild(start);
 			
-			start.blackButton.addEventListener(MouseEvent.CLICK, startGameHandler);
+			start.coinButton.addEventListener(MouseEvent.CLICK, startGameHandler);
 		}
 		
 		private function startGameHandler(evt:MouseEvent):void
