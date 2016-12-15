@@ -2,12 +2,12 @@ package SkeletonStates
 {
 	import Skeleton;
 	
-	public class InitState implements IAgentState
+	public class StopState implements IAgentState
 	{
 		
 		public function update(s:Skeleton):void
 		{
-			s.setState(Skeleton.WANDER);
+			//s.setState(Skeleton.WANDER);
 		}
 		
 		public function enter(s:Skeleton):void

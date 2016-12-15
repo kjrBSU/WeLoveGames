@@ -239,6 +239,7 @@
 
 		private function update(evt: Event): void {
 		
+			//trace(skeletons.length);
 			ammoIcon.x = player.x + 750;
 			ammoIcon.y = player.y - 800;
 
@@ -307,9 +308,14 @@
 						if (skele.hitTestPoint(bullet.x, bullet.y)) {
 							skele.health -= 100
 							if (skele.health < 1) {
-								skeletons.removeAt(skeletons.indexOf(skele))
-								skele.kill();
+								//skeletons.removeAt(skeletons.indexOf(skele))
+								skele.stopSkeleton();
 								killBullet(bullet);
+								if (skele.bulletsFired.length == 0)
+								{
+									background.removeChild(skele);
+									skeletons.removeAt(skeletons.indexOf(skele))
+								}
 								soundEffectChannel = skeletonSound.play(500, 1);
 								skele.health = 2;
 								score += 5;
@@ -349,7 +355,8 @@
 
 				for each(var b: Particle in s.bulletsFired) {
 					s.parent.addChild(b);
-					if (b.hitTestObject(player)) {
+					if (b.hitTestObject(player)) 
+					{
 						player.life -= 100;
 						s.bulletsFired.removeAt(s.bulletsFired.indexOf(b));
 						s.parent.removeChild(b);
@@ -515,7 +522,6 @@
 				background.addChild(skeletonTimed);
 				skeletons.push(skeletonTimed);
 			}
-			trace(skeletons);
 		}
 
 		private function killPirate(pirate: Pirate): void {
@@ -647,7 +653,9 @@
 				}
 				if (background.getChildAt(i) is Skeleton) {
 					for each(var skeletonI: Skeleton in skeletons) {
-						player.didHitEnemy(skeletonI);
+						if (skeletonI.alpha > 0){
+							player.didHitEnemy(skeletonI);
+						}
 					}
 				}
 

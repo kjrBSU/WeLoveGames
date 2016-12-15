@@ -12,7 +12,7 @@
 	import SkeletonStates.BumpState;
 	import SkeletonStates.ChaseState;
 	import SkeletonStates.IAgentState;
-	import SkeletonStates.InitState;
+	import SkeletonStates.StopState;
 	import SkeletonStates.ThrowState;
 	import SkeletonStates.WanderState;
 	
@@ -25,7 +25,7 @@
 	{
 		public static const WANDER:IAgentState = new WanderState();
 		public static const BUMP:IAgentState = new BumpState();
-		public static const INIT:IAgentState = new InitState();
+		public static const INIT:IAgentState = new StopState();
 		public static const CHASE:IAgentState = new ChaseState();
 		public static const THROW:IAgentState = new ThrowState();
 		
@@ -41,6 +41,7 @@
 		private var _isSkeleBump:Boolean;
 		private var _bumperFrames:Number = 0;
 		private var bumperBuffer:Number = 10;
+		
 		private var _isPlayerNear:Boolean = false;
 		
 		public var chaseRadius:Number = 900;
@@ -189,19 +190,31 @@
 			this.y += Math.sin(angle) * speed;
 		}
 		
-		public function kill():void
+		public function killSkeleton():void
 		{
-				for (var i:Number = 0; i < bulletsFired.length; i++)
-				{
-					if (bulletsFired.length > 0)
-					{
-						this.parent.removeChild(bulletsFired[i])
-						//bulletsFired.removeAt(i);
-					}
-				}
+			this.parent.removeChild(this);
+		}
 		
-				this.parent.removeChild(this);
+		public function stopSkeleton()
+		{
+			this.vx = 0
+			this.vy = 0
+			this._currentState = INIT;
+			this.alpha = 0;
+		
 			
+		}
+		
+		public function killBullets():void
+		{
+			for (var i:Number = 0; i < bulletsFired.length; i++)
+			{
+				if (bulletsFired.length > 0)
+				{
+					this.parent.removeChild(bulletsFired[i])
+						//bulletsFired.removeAt(i);
+				}
+			}
 		}
 	
 	}
