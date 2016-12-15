@@ -81,6 +81,7 @@
 		private var pirateGrabbedTreasure:Sound;
 		private var playerGotHit:Sound;
 		private var endMusic:Sound;
+		private var ammoPickUp:Sound;
 
 		public function ThomasMain() {
 			
@@ -92,6 +93,7 @@
 			pirateGrabbedTreasure = new Sound(new URLRequest("PickedUpTreasure.mp3"));
 			playerGotHit = new Sound(new URLRequest("playerBeingHit.mp3"));
 			endMusic = new Sound(new URLRequest("endGameTheme.mp3"));
+			ammoPickUp = new Sound(new URLRequest("ammoPickUp.mp3"));
 
 			bullets = new Array();
 
@@ -285,7 +287,7 @@
 					if (player.hitTestPoint(ammo.x, ammo.y)) {
 						background.removeChild(ammo);
 						player.addAmmo();
-						soundEffectChannel = playerGotHit.play();
+						soundEffectChannel = ammoPickUp.play();
 					}
 				}
 			}
@@ -458,7 +460,7 @@
 		}
 
 		private function makeASkeleton(): void {
-			for (var i: uint = 0; i < 1; i++) {
+			for (var i: uint = 0; i < 2; i++) {
 				var skeletonTimed: Skeleton = new Skeleton();
 				var spawnPoint: skeletonSpawn = skeletonPoints[i = Math.floor(Math.random() * ammoPoints.length)];
 				skeletonTimed.x = spawnPoint.x;
