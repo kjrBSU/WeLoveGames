@@ -115,12 +115,10 @@
 		{
 			if(damageFrames == damageBuffer && takeDamage == true){
 				life -= 100;
-				trace(life);
 				takeDamage = false;
 				makeSound();
 			}
 			else if (damageFrames > damageBuffer){
-				//takeDamage = false;
 				damageFrames = 0;
 			}
 			
@@ -224,7 +222,6 @@
 			x += xVel;
 			y += yVel;
 		hairMovement();	
-			trace (rotation);
 		
 		}
 		
