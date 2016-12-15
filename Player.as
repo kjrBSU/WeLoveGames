@@ -14,6 +14,7 @@
 		
 		public var xVel:Number;
 		public var yVel:Number;
+		public var movingSpeed:Number;
 		public var speed:Number;
 		public var life:Number;
 		public var ammo:Number;
@@ -30,7 +31,8 @@
 			
 			xVel = 0;
 			yVel = 0;
-			speed = 1;
+			movingSpeed = 30;
+			speed = 2;
 			life = 1000;
 			ammo = 12;
 			
@@ -70,21 +72,25 @@
 			//xVel = 0;
 			//yVel = 0;
 			
-			if(this.y > collidedObject.y && this.yVel == -20)
+			if(this.y > collidedObject.y && this.yVel == -movingSpeed)
 			{
+				bumpBuffer = movingSpeed
 				this.y += bumpBuffer; 
 			}
-			if(this.y < collidedObject.y && this.yVel == 20)
+			if(this.y < collidedObject.y && this.yVel == movingSpeed)
 			{
+				bumpBuffer = movingSpeed
 				this.y -= bumpBuffer;
 			}
 			
-			if (this.x > collidedObject.x && this.xVel == -20)
+			if (this.x > collidedObject.x && this.xVel == -movingSpeed)
 			{
+				bumpBuffer = movingSpeed
 				this.x += bumpBuffer;
 			}
-			if(this.x < collidedObject.x && this.xVel == 20)
+			if(this.x < collidedObject.x && this.xVel == movingSpeed)
 			{
+				bumpBuffer = movingSpeed
 				this.x -= bumpBuffer;
 			}
 			

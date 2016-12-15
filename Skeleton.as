@@ -40,11 +40,11 @@
 		
 		private var _isSkeleBump:Boolean;
 		private var _bumperFrames:Number = 0;
-		private var bumperBuffer:Number = 10;     
+		private var bumperBuffer:Number = 10;
 		private var _isPlayerNear:Boolean = false;
 		
-		public var chaseRadius:Number = 700;
-		public var throwRadius:Number = 500;
+		public var chaseRadius:Number = 900;
+		public var throwRadius:Number = 700;
 		private var _hitRadius:Number = 1;
 		
 		public var _target:MovieClip;
@@ -55,7 +55,7 @@
 		{
 			_vx = Math.random() - Math.random();
 			_vy = Math.random() - Math.random();
-			speed = 5;
+			speed = 10;
 			_currentState = WANDER;
 		}
 		
@@ -63,19 +63,18 @@
 		{
 			//_isSkeleBump = false;
 			if (!_currentState) return;
-			_currentState.update(this);	
+			_currentState.update(this);
 			//trace ("Spoopy Skeleton Update!");
-			
 			
 			if (_isSkeleBump == true)
 			{
 				_bumperFrames++;
 				this.bumperFrames()
 			}
-			
+		
 		}
 		
-		public function setState(newState:IAgentState):void 
+		public function setState(newState:IAgentState):void
 		{
 			if (_currentState == newState) return;
 			if (_currentState)
@@ -154,7 +153,7 @@
 			if (this.hitTestObject(dspOb) == true)
 			{
 				_isSkeleBump = true;
-	
+				
 			}
 		}
 		
@@ -167,7 +166,7 @@
 			
 			else if (_bumperFrames > bumperBuffer)
 			{
-				this._isSkeleBump = false; 
+				this._isSkeleBump = false;
 				_bumperFrames = 0;
 			}
 		}
@@ -192,13 +191,18 @@
 		
 		public function kill():void
 		{
-			for each (var bullet:SkeleBullet in bulletsFired)
-			{
-				bulletsFired.removeAt(bulletsFired.indexOf(bullet))
-				this.parent.removeChild(bullet);
-			}
-			this.parent.removeChild(this);
-		}
+				for (var i:Number = 0; i < bulletsFired.length; i++)
+				{
+					if (bulletsFired.length > 0)
+					{
+						this.parent.removeChild(bulletsFired[i])
+						//bulletsFired.removeAt(i);
+					}
+				}
 		
+				this.parent.removeChild(this);
+			
+		}
+	
 	}
 }

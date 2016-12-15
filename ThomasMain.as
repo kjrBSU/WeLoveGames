@@ -304,7 +304,7 @@
 				
 			} else if (event.target.currentCount == 10 || event.target.currentCount == 20) {
 				makeASkeleton();
-			} else if (event.target.currentCount == 5) {
+			} else if (event.target.currentCount == 5 || event.target.currentCount == 35) {
 				addAPirate();
 			} else if (event.target.currentCount == 30) {
 				makeASkeleton();
@@ -314,6 +314,7 @@
 		}
 		private function addScore():void {
 			score += 10;
+			pirateMan.speed += 3;
 		}
 
 		private function fireBullet(evt: MouseEvent): void {
@@ -400,16 +401,16 @@
 		private function keyDownHandler(evt: KeyboardEvent): void {
 			//87=w 68=d 83=s 65=a
 			if (evt.keyCode == 87) {
-				player.yVel = -20;
+				player.yVel = -player.movingSpeed;
 				player.movingVerticle = true;
 			} else if (evt.keyCode == 83) {
-				player.yVel = 20;
+				player.yVel = player.movingSpeed;
 				player.movingVerticle = true;
 			} else if (evt.keyCode == 68) {
-				player.xVel = 20;
+				player.xVel = player.movingSpeed;
 				player.movingVerticle = false;
 			} else if (evt.keyCode == 65) {
-				player.xVel = -20;
+				player.xVel = -player.movingSpeed;
 				player.movingVerticle = false;
 			}
 		}
@@ -479,7 +480,7 @@
 		}
 
 		private function movePirateToPad(pirate: Pirate): void {
-			var speed: Number = 15;
+			var speed: Number = pirate.speed;
 			var dx: Number = pirate.x - piratePad.x;
 			var dy: Number = pirate.y - piratePad.y;
 			var angle = Math.atan2(dy, dx);
@@ -488,7 +489,7 @@
 		}
 
 		private function movePirateToTreasure(pirate: Pirate): void {
-			var speed = 15;
+			var speed = pirate.speed;
 			if (pirateMan != null) {
 				var dx: Number = treasure.x - pirate.x;
 				var dy: Number = treasure.y - pirate.y;

@@ -6,7 +6,7 @@
 
 
 	public class Pirate extends MovieClip {
-		public var speed: Number = 10;
+		public var speed: Number = 20;
 		public var status: String = "Alive";
 		public var life: Number = 200;
 		public var angle:Number;
