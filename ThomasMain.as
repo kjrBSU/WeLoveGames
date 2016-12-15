@@ -12,8 +12,7 @@
 	import flash.utils.getQualifiedClassName;
 	import flash.events.TimerEvent;
 	import flash.text.*;
-	import flash.media.Sound;
-    import flash.media.SoundChannel; 
+	import flash.media.*;
 	import flash.net.*;
 
 	import MapBound;
@@ -82,11 +81,15 @@
 		private var playerGotHit:Sound;
 		private var endMusic:Sound;
 		private var ammoPickUp:Sound;
+		private var transform1:SoundTransform=new SoundTransform();
+		
 
 		public function ThomasMain() {
 			
+			transform1.volume=.7; // goes from 0 to 1
+			
 			snd = new Sound(new URLRequest("gameSounds/inGame.mp3"));
-			themeChannel = snd.play(2000, 1);
+			themeChannel = snd.play(2000, 1, transform1);
 			skeletonSound = new Sound(new URLRequest("gameSounds/skeleSound.mp3"));
 			pirateDying = new Sound(new URLRequest("gameSounds/pirateDying.mp3"));
 			pirateSpawned = new Sound(new URLRequest("gameSounds/PirateSpawn.mp3"));
@@ -334,6 +337,7 @@
 		}
 
 		private function dankSpawnSystem(event: TimerEvent) {
+			score++;
 			if (event.target.currentCount == 1) {
 				makeammoBoxes();
 				
@@ -344,12 +348,7 @@
 			} else if (event.target.currentCount == 30) {
 				makeASkeleton();
 				removeAmmo();
-				addScore();
 			}
-		}
-		private function addScore():void {
-			score += 10;
-			pirateMan.speed += 3;
 		}
 
 		private function fireBullet(evt: MouseEvent): void {
@@ -460,7 +459,7 @@
 		}
 
 		private function makeASkeleton(): void {
-			for (var i: uint = 0; i < 2; i++) {
+			for (var i: uint = 0; i < 3; i++) {
 				var skeletonTimed: Skeleton = new Skeleton();
 				var spawnPoint: skeletonSpawn = skeletonPoints[i = Math.floor(Math.random() * ammoPoints.length)];
 				skeletonTimed.x = spawnPoint.x;
