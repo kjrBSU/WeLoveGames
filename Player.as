@@ -17,6 +17,14 @@
 		public var speed:Number;
 		public var life:Number;
 		public var ammo:Number;
+		public var ponyTail:Segment;
+		private var dredLock1:Segment;
+		private var dredLock2:Segment;
+		private var dredLock3:Segment;
+		private var dredLock4:Segment;
+		private var dredLock5:Segment;
+		private var dredLock6:Segment;
+		private var dredLock7:Segment;
 		private var collidedObject:DisplayObject;
 		private var collided:Boolean = false;
 		private var takeDamage:Boolean = false;
@@ -26,13 +34,53 @@
 		private var bumpBuffer:Number = 20;
 		private var addedAmmo:Number = 5;
 		
+		
+		
+		
+		
+		private var dredLocks:Array = new Array(); 
+		
 		public function Player() {
 			
+			
+			dredLock1= new Segment(50, 10, 0x603913);
+			dredLock1.x = x;
+			dredLock1.y = y;
+			
+			dredLock2= new Segment(50, 10, 0x603913);
+			dredLock2.x = x-6;
+			dredLock2.y = y+9;
+			
+			dredLock3= new Segment(50, 10, 0x603913);
+			dredLock3.x = x-6;
+			dredLock3.y = y-9;
+			
+			dredLock4= new Segment(50, 10, 0x603913);
+			dredLock4.x = x-12;
+			dredLock4.y = y + 22;
+		
+			dredLock5= new Segment(50, 10, 0x603913);
+			dredLock5.x = x-12;
+			dredLock5.y = y-22;
+			
+			dredLock6= new Segment(50, 10, 0x603913);
+			dredLock6.x = x-20;
+			dredLock6.y = y+30;
+		
+			dredLock7= new Segment(50, 10, 0x603913);
+			dredLock7.x = x-20;
+			dredLock7.y = y-30;
+			
+			/*ponyTail= new Segment(70, 10, 0x603913);
+			addChild(ponyTail);*/
 			xVel = 0;
 			yVel = 0;
 			speed = 1;
 			life = 1000;
 			ammo = 12;
+			
+			/*dredLocks.push(dredLock1, dredLock2, dredLock3, dredLock4, dredLock5, dredLock6, dredLock7);*/
+			dredLocks.push(dredLock7, dredLock6, dredLock5, dredLock4, dredLock3, dredLock2, dredLock1);
 			
 		}
 		public function didHitObject(dispObj:DisplayObject):void {
@@ -118,11 +166,43 @@
 			}			
 		}
 			
-		
+		private function hairMovement():void {
+			
+			
+			for each(var dred:Segment in dredLocks) {
+				dred.rotation = 180;
+				addChild(dred);
+			if (xVel > 0) {
+				if (dred.rotation > -90) {
+					dred.rotation = -160;
+					
+				}
+				
+				
+			} else if (xVel < 0) {
+				if (dred.rotation > 90) {
+				dred.rotation = 160;
+				}
+			}
+			if (yVel > 0) {
+				if (dred.rotation > 90) {
+				dred.rotation = 160;
+				}
+				
+			} else if (yVel < 0) {
+				if (dred.rotation > -90) {
+				dred.rotation = -160;
+				}
+			}
+		}
+		}
 		public function update():void
 		{
 			x += xVel;
 			y += yVel;
+		hairMovement();	
+			trace (rotation);
+		
 		}
 		
 	}
