@@ -22,6 +22,7 @@
 	import Pirate;
 	import Treasure;
 	import flash.text.engine.GraphicElement;
+	import com.adobe.tvsdk.mediacore.TextFormat;
 
 	public class ThomasMain extends MovieClip {
 
@@ -39,6 +40,9 @@
 		private var scoreText: TextField;
 		private var score: uint = 0;
 		private var ammoIcon: Sprite = new ammoSymbol();
+		private var insultText:TextField;
+		private var timerText:TextField;
+		private var time:uint = 0;
 
 		private var ammoLayer: Sprite = new Sprite();
 		private var topLeft: Point = new Point(365, 602);
@@ -83,6 +87,13 @@
 		private var ammoPickUp:Sound;
 		private var transform1:SoundTransform=new SoundTransform();
 		
+		private var insults:Array = new Array("Lemme spell out the rules for ye, I win. YOU LOSE!", 
+											"Yar thieving, work Shirking, rapscallion!", 
+											"Ye grog faced gold stealin' stink on legs!", 
+											"Yar salt crusted land lubber!", 
+											"Hands off me booty ye cargo thieving freebooter!", 
+											"Yarr mutinous, rotten rigged, bilge drinker!");
+		
 
 		public function ThomasMain() {
 			
@@ -104,27 +115,43 @@
 			background.y = 0;
 			addChild(background);
 		
-			var myFormat: TextFormat = new TextFormat();
-			myFormat.size = 100;
+			var UI: TextFormat = new TextFormat();
+			UI.size = 100;
+			UI.align = TextFormatAlign.RIGHT;
+			
+			var insultFormat: TextFormat = new TextFormat();
+			insultFormat.size = 100;
+			insultFormat.align = TextFormatAlign.CENTER;
 
 
 			healthText = new TextField();
-			healthText.defaultTextFormat = myFormat;
+			healthText.defaultTextFormat = UI;
 			healthText.width = 500;
 			healthText.height = 400;
 			addChild(healthText);
 			
 			scoreText = new TextField();
-			scoreText.defaultTextFormat = myFormat;
-			healthText.width = 500;
-			scoreText.width = 400;
+			scoreText.defaultTextFormat = UI;
+			scoreText.width = 800;
+			scoreText.height = 400;
 			addChild(scoreText);
+			
+			timerText = new TextField();
+			timerText.defaultTextFormat = UI;
+			timerText.width = 800;
+			timerText.height = 400;
+			addChild(timerText);
 
 			ammoText = new TextField();
-			ammoText.defaultTextFormat = myFormat;
+			ammoText.defaultTextFormat = UI;
 			ammoText.width = 500;
 			ammoText.height = 400;
 			addChild(ammoText);
+			
+			insultText = new TextField();
+			insultText.defaultTextFormat = insultFormat;
+			insultText.width = 5000;
+			insultText.height = 300;
 
 
 			player = new Player();
@@ -212,22 +239,26 @@
 
 		private function update(evt: Event): void {
 		
-			ammoIcon.x = player.x + 1150;
+			ammoIcon.x = player.x + 750;
 			ammoIcon.y = player.y - 800;
 
-			ammoText.x = player.x + 800;
+			ammoText.x = player.x + 750;
 			ammoText.y = player.y - 850;
 			ammoAmount = player.ammo;
 			ammoText.text = (ammoAmount.toString() + " / 25");
 			
-			scoreText.x = player.x + 850;
+			scoreText.x = player.x + 450;
 			scoreText.y = player.y -750;
-			scoreText.text = ("score: " + score.toString());
+			scoreText.text = ("score:            " + score.toString());
+			
+			timerText.x = player.x -1650;
+			timerText.y = player.y -950;
+			timerText.text = ("Time:    " +time.toString());
 
-			playerHealthBar.x = player.x + 250;
+			playerHealthBar.x = player.x + 850;
 			playerHealthBar.y = player.y - 900;
 
-			healthText.x = player.x - 150;
+			healthText.x = player.x + 750;
 			healthText.y = player.y - 960;
 			health = player.life / 10;
 			healthText.text = (health.toString() + " / 100");
@@ -243,8 +274,15 @@
 			didPirateHitTreasure(pirateMan);
 			}
 			
-			if (pirateMan.life < 1) {
+			if (pirateMan.life < 1 && pirateHasTreasure == false) {
 					killPirate(pirateMan);
+					pirateMan.life = 2;
+					score += 5;
+			}
+			if(pirateMan.life < 1 && pirateHasTreasure == true){
+				score += 10;
+				killPirate(pirateMan);
+				pirateMan.life = 2;
 			}
 
 			camera(player);
@@ -273,6 +311,9 @@
 								skele.kill();
 								killBullet(bullet);
 								soundEffectChannel = skeletonSound.play(500, 1);
+								skele.health = 2;
+								score += 5;
+								
 							}
 
 						}
@@ -337,7 +378,7 @@
 		}
 
 		private function dankSpawnSystem(event: TimerEvent) {
-			score++;
+			time++;
 			if (event.target.currentCount == 1) {
 				makeammoBoxes();
 				
@@ -459,7 +500,7 @@
 		}
 
 		private function makeASkeleton(): void {
-			for (var i: uint = 0; i < 3; i++) {
+			for (var i: uint = 0; i < 2; i++) {
 				var skeletonTimed: Skeleton = new Skeleton();
 				var spawnPoint: skeletonSpawn = skeletonPoints[i = Math.floor(Math.random() * ammoPoints.length)];
 				skeletonTimed.x = spawnPoint.x;
@@ -615,10 +656,16 @@
 			root.scrollRect = viewRect;
 			//new Rectangle(char.x - stage.stageWidth / 2, char.y - stage.height / 2, stage.stageWidth, stage.stageHeight);
 		}
+		private function getInsult():void {
+			var i:int;
+			var rude: String = insults[i = Math.floor(Math.random() * insults.length)];
+			insultText.text = (rude);
+			
+		}
 		
 		private function endGame()
 		{
-			if (player.life < 1 || pirateEscaped == true)
+			if (player.life < 1 /*|| pirateEscaped == true*/)
 			{
 				
 				removeFromStage();
@@ -630,10 +677,18 @@
 
 				themeChannel.stop();
 				endChannel = endMusic.play(5000, 1);
+				
+				healthText.text = (0 + "/ 100");
+				playerHealthBar.width = 0;
+				
+				getInsult();
+				insultText.x = viewRect.x + viewRect.width / 2 - 2500;
+				insultText.y = viewRect.y + viewRect.height / 2 - 200;
+				background.addChild(insultText);
 				//snd.close();
 				
 			}
-			/*if (pirateHasTreasure == true && pirateEscaped == true)
+			if (pirateHasTreasure == true && pirateEscaped == true)
 			{
 				
 				removeFromStage();
@@ -642,9 +697,18 @@
 				resetBtn.x = viewRect.x + viewRect.width / 2 - resetBtn.width / 2;
 				resetBtn.y = viewRect.y + viewRect.height / 2 - resetBtn.height / 2;
 				resetBtn.addEventListener(MouseEvent.CLICK, resetGame);	
-				channel.stop();
-				snd.close();
-			}*/
+				
+				themeChannel.stop();
+				endChannel = endMusic.play(5000, 1);
+				
+				/*healthText.text = (0 + "/ 100");
+				playerHealthBar.width = 0;*/
+				
+				getInsult();
+				insultText.x = viewRect.x + viewRect.width / 2 - 2500;
+				insultText.y = viewRect.y + viewRect.height / 2 - 200;
+				background.addChild(insultText);
+			}
 			
 		}
 		private function resetGame(e:Event):void 
