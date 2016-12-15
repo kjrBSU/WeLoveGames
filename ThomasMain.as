@@ -382,14 +382,20 @@
 			if (event.target.currentCount == 1) {
 				makeammoBoxes();
 				
-			} else if (event.target.currentCount == 10 || event.target.currentCount == 20) {
+			} else if (event.target.currentCount % 7 == 0) {
 				makeASkeleton();
-			} else if (event.target.currentCount == 5 || event.target.currentCount == 35) {
-				addAPirate();
+			} else if (event.target.currentCount % 18 == 0) {
+				if (pirateMan.isAlive == true) {
+					addAPirate();
+				}
 			} else if (event.target.currentCount == 30) {
-				makeASkeleton();
 				removeAmmo();
 			}
+		}
+		
+		private function addScore():void {
+			score += 10;
+			pirateMan.speed += 2
 		}
 
 		private function fireBullet(evt: MouseEvent): void {
@@ -517,6 +523,7 @@
 				if(pirateMan.currentFrame == 1) {
 					background.removeChild(pirateMan);
 					soundEffectChannel = pirateDying.play();
+					pirateMan.isAlive == false;
 					
 				}
 				if (pirateMan.currentFrame == 2) {
@@ -544,6 +551,7 @@
 			pirateMan.gotoAndStop(1);
 			pirateMan.pointOfInterest = pirateMan.lookAtAnObject(treasure.x, treasure.y);
 			soundEffectChannel = pirateSpawned.play();
+			pirateMan.isAlive == true;
 		}
 
 		private function setPiratePad(): void {
