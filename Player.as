@@ -9,11 +9,15 @@
 	import flash.ui.Keyboard;	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.media.Sound;
+    import flash.media.SoundChannel; 
+	import flash.net.*;
 	
 	public class Player extends MovieClip {
 		
 		public var xVel:Number;
 		public var yVel:Number;
+		public var movingSpeed:Number;
 		public var speed:Number;
 		public var life:Number;
 		public var ammo:Number;
@@ -33,6 +37,9 @@
 		private var damageBuffer:Number = 15;
 		private var bumpBuffer:Number = 20;
 		private var addedAmmo:Number = 5;
+		private var playerGotHit:Sound;
+		
+		private var channel:SoundChannel;
 		
 		
 		
@@ -42,6 +49,7 @@
 		
 		public function Player() {
 			
+
 			
 			dredLock1= new Segment(50, 10, 0x603913);
 			dredLock1.x = x;
@@ -73,9 +81,12 @@
 			
 			/*ponyTail= new Segment(70, 10, 0x603913);
 			addChild(ponyTail);*/
+
+			playerGotHit = new Sound(new URLRequest("gameSounds/playerBeingHit.mp3"));
 			xVel = 0;
 			yVel = 0;
-			speed = 1;
+			movingSpeed = 30;
+			speed = 2;
 			life = 1000;
 			ammo = 12;
 			
@@ -97,6 +108,7 @@
 				damage();
 				takeDamage = true;
 				damageFrames++;
+				
 			}
 		}
 		private function damage():void 
@@ -105,34 +117,45 @@
 				life -= 100;
 				trace(life);
 				takeDamage = false;
+				makeSound();
 			}
 			else if (damageFrames > damageBuffer){
 				//takeDamage = false;
 				damageFrames = 0;
+			}
+			
+		}
+		private function makeSound():void {
+			for(var i:int = 0; i < 1; i++){
+			channel = playerGotHit.play();
 			}
 		}
 		private function hitByBullet():void {
 			life -= 100;
 		}
 		private function stopPlayer():void {
-			xVel = 0;
-			yVel = 0;
+			//xVel = 0;
+			//yVel = 0;
 			
-			if(this.y > collidedObject.y && movingVerticle == true)
+			if(this.y > collidedObject.y && this.yVel == -movingSpeed)
 			{
-				this.y += bumpBuffer 
+				bumpBuffer = movingSpeed
+				this.y += bumpBuffer; 
 			}
-			if(this.y < collidedObject.y && movingVerticle == true)
+			if(this.y < collidedObject.y && this.yVel == movingSpeed)
 			{
+				bumpBuffer = movingSpeed
 				this.y -= bumpBuffer;
 			}
 			
-			if (this.x > collidedObject.x && movingVerticle == false)
+			if (this.x > collidedObject.x && this.xVel == -movingSpeed)
 			{
+				bumpBuffer = movingSpeed
 				this.x += bumpBuffer;
 			}
-			if(this.x < collidedObject.x && movingVerticle == false)
+			if(this.x < collidedObject.x && this.xVel == movingSpeed)
 			{
+				bumpBuffer = movingSpeed
 				this.x -= bumpBuffer;
 			}
 			
