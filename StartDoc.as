@@ -16,6 +16,7 @@
 		private var startSound:Sound;
 		private var mySoundChannel:SoundChannel = new SoundChannel();
 		private var menuChannel:SoundChannel;
+		
 		public function StartDoc()
 		{
 			//stage.scaleMode = StageScaleMode.NO_SCALE;

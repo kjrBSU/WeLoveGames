@@ -14,6 +14,7 @@
 	import flash.text.*;
 	import flash.media.*;
 	import flash.net.*;
+	import flash.display.*;
 
 	import MapBound;
 	import ammoSpawn;
@@ -72,6 +73,11 @@
 		private var viewRect: Rectangle;
 		
 		private var resetBtn:resetButton;
+		private var upgrades:upgradeUI;
+		private var resume:Boolean = false;
+		/*private var spearUp:spearUpgrade = new spearUpgrade();
+		private var healthUp:healthUpgrade = new healthUpgrade();
+		private var moveUp:moveUpgrade = new moveUpgrade();*/
 		
 		private var snd:Sound;
 		private var soundStart:int = 2000;
@@ -238,6 +244,11 @@
 		}
 
 		private function update(evt: Event): void {
+			if(score == 5){
+				getUpgrade();
+				
+				
+			}
 		
 			ammoIcon.x = player.x + 750;
 			ammoIcon.y = player.y - 800;
@@ -669,6 +680,95 @@
 			var rude: String = insults[i = Math.floor(Math.random() * insults.length)];
 			insultText.text = (rude);
 			
+		}
+		
+		private function getUpgrade():void {
+			upgrades = new upgradeUI();
+			upgrades.x = viewRect.x + viewRect.width /2 - upgrades.width/2;
+			upgrades.y = viewRect.y + viewRect.height /2 - upgrades.height/2;
+			background.addChild(upgrades);
+			
+			///*healthUpgrade = new healthUpgrade();*/
+			//healthUp.x = viewRect.x + viewRect.width /2 - upgrades.width/2 - 200;
+			//healthUp.y = viewRect.y + viewRect.height /2 - upgrades.height/2 + 400;
+			//upgrades.addChild(healthUp);
+			//
+			///*moveUpgrade = new moveUpgrade();*/
+			//moveUp.x = viewRect.x + viewRect.width /2 - upgrades.width/2;
+			//moveUp.y = viewRect.y + viewRect.height /2 - upgrades.height/2 + 400;
+			//upgrades.addChild(moveUp);
+			//
+			///*spearUpgrade = new spearUpgrade();*/
+			//spearUp.x = viewRect.x + viewRect.width /2 - upgrades.width/2 + 200;
+			//spearUp.y = viewRect.y + viewRect.height /2 - upgrades.height/2 + 400;
+			//upgrades.addChild(spearUp);
+			
+			player.life = 1000;
+			
+			pauseGame();				
+
+			upgrades.healthUp.addEventListener(MouseEvent.MOUSE_DOWN, healthIncrease);
+			upgrades.moveUp.addEventListener(MouseEvent.MOUSE_DOWN, moveSpeed);
+			upgrades.spearUp.addEventListener(MouseEvent.MOUSE_DOWN, spearSpeed);
+			/*if(resume == true){
+				resumeGame();
+				
+				
+			}*/
+			//resumeGame();
+
+		}
+		private function spearSpeed(event:MouseEvent):void {
+				upgrades.moveUp.enabled = false;
+				player.speed += player.speed * .3;
+				score +=10;
+				resumeGame();
+				background.removeChild(upgrades);
+				
+		}
+		private function moveSpeed(event:MouseEvent):void {
+				upgrades.spearUp.enabled = false;
+				trace("hello");
+				player.movingSpeed += player.movingSpeed * .3;
+				score += 10;
+				resumeGame();
+				background.removeChild(upgrades);
+			
+		}
+		private function healthIncrease(event:MouseEvent):void {
+				upgrades.healthUp.enabled = false;
+				player.life += 500;
+				resumeGame();
+				score += 10;
+				background.removeChild(upgrades);
+				trace("clicked the button");
+			
+			
+			
+		}
+		
+		
+	
+		private function resumeGame():void {
+			trace("got to resumeGame");
+			upgrades.healthUp.removeEventListener(MouseEvent.MOUSE_DOWN, healthIncrease);
+			upgrades.moveUp.removeEventListener(MouseEvent.MOUSE_DOWN, moveSpeed);
+			upgrades.spearUp.removeEventListener(MouseEvent.MOUSE_DOWN, spearSpeed);
+			stage.removeEventListener(Event.REMOVED_FROM_STAGE, resumeGame);
+			addEventListener(Event.ENTER_FRAME, update);
+			addEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+			
+			globalTimer.start();
+		}
+		private function pauseGame():void {
+			removeEventListener(Event.ENTER_FRAME, update);
+			removeEventListener(MouseEvent.MOUSE_DOWN, fireBullet);
+			stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+			stage.removeEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+			
+			globalTimer.stop();
 		}
 		
 		private function endGame()
