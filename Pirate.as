@@ -6,7 +6,8 @@
 
 
 	public class Pirate extends MovieClip {
-		public var speed: Number = 10;
+		public var isAlive:Boolean = true;
+		public var speed: Number = 15;
 		public var status: String = "Alive";
 		public var life: Number = 200;
 		public var angle:Number;
@@ -19,7 +20,7 @@
 			angle = Math.atan2(objectY - this.y, objectX - this.x);
 			var pirateAngle: Number = angle * 180 / Math.PI;
 			pointOfInterest = pirateAngle;
-			trace(pointOfInterest);
+			/*trace(pointOfInterest);*/
 			return pointOfInterest;
 		}
 		public function lookAtIt():void {

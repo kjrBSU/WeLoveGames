@@ -16,7 +16,7 @@
 			if (s.distanceToPlayer() < s.chaseRadius)
 			{
 				s.setState(Skeleton.CHASE);
-				trace("Enter Chase");
+				/*trace("Enter Chase");*/
 			}
 			frames++;
 			s.move();

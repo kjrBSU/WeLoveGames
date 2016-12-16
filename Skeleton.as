@@ -12,7 +12,7 @@
 	import SkeletonStates.BumpState;
 	import SkeletonStates.ChaseState;
 	import SkeletonStates.IAgentState;
-	import SkeletonStates.InitState;
+	import SkeletonStates.StopState;
 	import SkeletonStates.ThrowState;
 	import SkeletonStates.WanderState;
 	
@@ -25,7 +25,7 @@
 	{
 		public static const WANDER:IAgentState = new WanderState();
 		public static const BUMP:IAgentState = new BumpState();
-		public static const INIT:IAgentState = new InitState();
+		public static const INIT:IAgentState = new StopState();
 		public static const CHASE:IAgentState = new ChaseState();
 		public static const THROW:IAgentState = new ThrowState();
 		
@@ -40,22 +40,23 @@
 		
 		private var _isSkeleBump:Boolean;
 		private var _bumperFrames:Number = 0;
-		private var bumperBuffer:Number = 10;     
+		private var bumperBuffer:Number = 10;
+		
 		private var _isPlayerNear:Boolean = false;
 		
-		public var chaseRadius:Number = 700;
-		public var throwRadius:Number = 500;
+		public var chaseRadius:Number = 900;
+		public var throwRadius:Number = 700;
 		private var _hitRadius:Number = 1;
 		
 		public var _target:MovieClip;
 		
-		public var bulletsFired:Vector.<Particle> = new Vector.<Particle>();
+		public var bulletsFired:Array = new Array;
 		
 		public function Skeleton()
 		{
 			_vx = Math.random() - Math.random();
 			_vy = Math.random() - Math.random();
-			speed = 5;
+			speed = 10;
 			_currentState = WANDER;
 		}
 		
@@ -63,19 +64,18 @@
 		{
 			//_isSkeleBump = false;
 			if (!_currentState) return;
-			_currentState.update(this);	
+			_currentState.update(this);
 			//trace ("Spoopy Skeleton Update!");
-			
 			
 			if (_isSkeleBump == true)
 			{
 				_bumperFrames++;
 				this.bumperFrames()
 			}
-			
+		
 		}
 		
-		public function setState(newState:IAgentState):void 
+		public function setState(newState:IAgentState):void
 		{
 			if (_currentState == newState) return;
 			if (_currentState)
@@ -154,7 +154,7 @@
 			if (this.hitTestObject(dspOb) == true)
 			{
 				_isSkeleBump = true;
-	
+				
 			}
 		}
 		
@@ -167,7 +167,7 @@
 			
 			else if (_bumperFrames > bumperBuffer)
 			{
-				this._isSkeleBump = false; 
+				this._isSkeleBump = false;
 				_bumperFrames = 0;
 			}
 		}
@@ -190,15 +190,32 @@
 			this.y += Math.sin(angle) * speed;
 		}
 		
-		public function kill():void
+		public function killSkeleton():void
 		{
-			for each (var bullet:SkeleBullet in bulletsFired)
-			{
-				bulletsFired.removeAt(bulletsFired.indexOf(bullet))
-				this.parent.removeChild(bullet);
-			}
 			this.parent.removeChild(this);
 		}
 		
+		public function stopSkeleton()
+		{
+			this.vx = 0
+			this.vy = 0
+			this._currentState = INIT;
+			this.alpha = 0;
+		
+			
+		}
+		
+		public function killBullets():void
+		{
+			for (var i:Number = 0; i < bulletsFired.length; i++)
+			{
+				if (bulletsFired.length > 0)
+				{
+					this.parent.removeChild(bulletsFired[i])
+						//bulletsFired.removeAt(i);
+				}
+			}
+		}
+	
 	}
 }
