@@ -66,6 +66,9 @@
 		private var piratePOI: Number;
 		private var pirateEscaped:Boolean = false;
 		private var pirateHasTreasure:Boolean = false;
+		private var playerGotHealth:Boolean = false;
+		private var playerGotSpeed:Boolean = false;
+		private var playerGotSpear:Boolean = false;
 		private var skeletons: Array = new Array();
 
 		private var globalTimer: Timer = new Timer(1000, 30);
@@ -244,10 +247,8 @@
 		}
 
 		private function update(evt: Event): void {
-			if(score == 5){
+			if(score == 100 || score == 200 || score == 300){
 				getUpgrade();
-				
-				
 			}
 		
 			//trace(skeletons.length);
@@ -265,7 +266,7 @@
 			
 			timerText.x = player.x -1650;
 			timerText.y = player.y -950;
-			timerText.text = ("Time:    " +time.toString());
+			timerText.text = ("Time:  " +time.toString());
 
 			playerHealthBar.x = player.x + 850;
 			playerHealthBar.y = player.y - 900;
@@ -289,7 +290,7 @@
 			if (pirateMan.life < 1 && pirateHasTreasure == false) {
 					killPirate(pirateMan);
 					pirateMan.life = 2;
-					score += 5;
+					score += 10;
 			}
 			if(pirateMan.life < 1 && pirateHasTreasure == true){
 				score += 10;
@@ -329,7 +330,7 @@
 								}
 								soundEffectChannel = skeletonSound.play(500, 1);
 								skele.health = 2;
-								score += 5;
+								score += 10;
 								
 							}
 
@@ -405,16 +406,13 @@
 			} else if (event.target.currentCount % 18 == 0) {
 				if (pirateMan.isAlive == true) {
 					addAPirate();
+					pirateMan.speed += 1.5;
 				}
 			} else if (event.target.currentCount == 30) {
 				removeAmmo();
 			}
 		}
 		
-		private function addScore():void {
-			score += 10;
-			pirateMan.speed += 2
-		}
 
 		private function fireBullet(evt: MouseEvent): void {
 			var shot: Particle;
@@ -433,7 +431,7 @@
 				bullets.push(shot);
 				player.ammo -= 1;
 			}
-			trace(player.ammo);
+			/*trace(player.ammo);*/
 
 		}
 
@@ -557,12 +555,12 @@
 
 		private function addAPirate(): void {
 			pirateMan = new Pirate();
-			trace("timer done");
+			/*trace("timer done");*/
 			var i: Number;
 			var point: Point = piratePoints[i = Math.floor(Math.random() * piratePoints.length)];
 			pirateMan.x = point.x;
 			pirateMan.y = point.y;
-			trace(point);
+			/*trace(point);*/
 			background.addChild(pirateMan);
 			pirates.push(pirateMan);
 			pirateMan.gotoAndStop(1);
@@ -574,8 +572,8 @@
 		private function setPiratePad(): void {
 			var i: Number;
 			var point: Point = piratePoints[i = Math.floor(Math.random() * piratePoints.length)];
-			trace(point);
-			trace("setting pirate pad");
+			/*trace(point);
+			trace("setting pirate pad");*/
 
 			piratePad.x = point.x;
 			piratePad.y = point.y;
@@ -727,29 +725,38 @@
 
 		}
 		private function spearSpeed(event:MouseEvent):void {
+			if(playerGotSpear == false){
 				upgrades.moveUp.enabled = false;
-				player.speed += player.speed * .3;
+				player.speed += player.speed * .26;
 				score +=10;
 				resumeGame();
 				background.removeChild(upgrades);
+				playerGotSpear = true;
+			}
 				
 		}
 		private function moveSpeed(event:MouseEvent):void {
+			if(playerGotSpeed == false){
 				upgrades.spearUp.enabled = false;
-				trace("hello");
+				/*trace("hello");*/
 				player.movingSpeed += player.movingSpeed * .3;
 				score += 10;
 				resumeGame();
 				background.removeChild(upgrades);
+				playerGotSpeed = true;
+			}
 			
 		}
 		private function healthIncrease(event:MouseEvent):void {
+			if(playerGotHealth == false ){
 				upgrades.healthUp.enabled = false;
 				player.life += 500;
 				resumeGame();
 				score += 10;
 				background.removeChild(upgrades);
-				trace("clicked the button");
+				playerGotHealth = true;
+			}
+				/*trace("clicked the button");*/
 			
 			
 			
@@ -758,7 +765,7 @@
 		
 	
 		private function resumeGame():void {
-			trace("got to resumeGame");
+			/*trace("got to resumeGame");*/
 			upgrades.healthUp.removeEventListener(MouseEvent.MOUSE_DOWN, healthIncrease);
 			upgrades.moveUp.removeEventListener(MouseEvent.MOUSE_DOWN, moveSpeed);
 			upgrades.spearUp.removeEventListener(MouseEvent.MOUSE_DOWN, spearSpeed);
@@ -829,7 +836,7 @@
 		}
 		private function resetGame(e:Event):void 
 		{
-			trace("reset game");
+			/*trace("reset game");*/
 			//removeChild(background);
 			resetBtn.removeEventListener(MouseEvent.CLICK, resetGame);
 			while (numChildren > 0)

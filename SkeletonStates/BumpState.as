@@ -1,4 +1,4 @@
-package SkeletonStates
+﻿package SkeletonStates
 {
 	import Skeleton;
 	
@@ -24,14 +24,14 @@ package SkeletonStates
 		{
 			s.vx = -s.vx;
 			s.vy = -s.vy;
-			trace("Bump!")
+			/*trace("Bump!")*/
 		}
 		
 		public function exit(s:Skeleton):void
 		{
 			s.vx = s.vx + (Math.random() - Math.random());
 			s.vy = s.vy + (Math.random() - Math.random());
-			trace("Exit Bump");
+			/*trace("Exit Bump");*/
 		}
 	}
 }

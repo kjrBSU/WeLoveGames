@@ -85,8 +85,8 @@
 			playerGotHit = new Sound(new URLRequest("gameSounds/playerBeingHit.mp3"));
 			xVel = 0;
 			yVel = 0;
-			movingSpeed = 30;
-			speed = 2;
+			movingSpeed = 20;
+			speed = 1.7;
 			life = 1000;
 			ammo = 12;
 			

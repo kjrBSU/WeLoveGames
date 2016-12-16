@@ -20,7 +20,7 @@
 			angle = Math.atan2(objectY - this.y, objectX - this.x);
 			var pirateAngle: Number = angle * 180 / Math.PI;
 			pointOfInterest = pirateAngle;
-			trace(pointOfInterest);
+			/*trace(pointOfInterest);*/
 			return pointOfInterest;
 		}
 		public function lookAtIt():void {
